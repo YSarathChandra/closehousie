@@ -47,6 +47,118 @@ function writeJSON(filepath, data) {
   }
 }
 
+// Enhanced Tambola Ticket Generation (3x5 format per ticket)
+function generateTickets(count, startIndex = 0) {
+  const tickets = [];
+  const usedNumbers = new Set();
+
+  for (let ticketNum = 0; ticketNum < count; ticketNum++) {
+    const ticket = Array(3).fill(null).map(() => Array(9).fill(0));
+    const ticketNumbers = new Set();
+
+    // Column ranges for Tambola (1-9, 10-19, ..., 80-90)
+    const ranges = [
+      { min: 1, max: 9 },
+      { min: 10, max: 19 },
+      { min: 20, max: 29 },
+      { min: 30, max: 39 },
+      { min: 40, max: 49 },
+      { min: 50, max: 59 },
+      { min: 60, max: 69 },
+      { min: 70, max: 79 },
+      { min: 80, max: 90 }
+    ];
+
+    // Fill 5 numbers per row (3 rows = 15 numbers total)
+    for (let row = 0; row < 3; row++) {
+      let numbersInRow = 0;
+      let colAttempts = 0;
+
+      while (numbersInRow < 5 && colAttempts < 50) {
+        const col = Math.floor(Math.random() * 9);
+
+        if (ticket[row][col] === 0) {
+          const range = ranges[col];
+          let num;
+          let attempts = 0;
+
+          do {
+            const seed = (startIndex * 1000 + ticketNum * 100 + row * 10 + col) * 7 + attempts;
+            num = range.min + (seed % (range.max - range.min + 1));
+            attempts++;
+          } while ((ticketNumbers.has(num) || usedNumbers.has(num)) && attempts < 20);
+
+          if (!ticketNumbers.has(num) && !usedNumbers.has(num)) {
+            ticket[row][col] = num;
+            ticketNumbers.add(num);
+            usedNumbers.add(num);
+            numbersInRow++;
+          }
+        }
+        colAttempts++;
+      }
+    }
+
+    tickets.push({
+      id: uuidv4(),
+      grid: ticket,
+      markedNumbers: [],
+      claimedPrizes: []
+    });
+  }
+
+  return tickets;
+}
+
+// Prize detection with amounts
+function detectPrizes(markedNumbers, drawnNumbers, ticket, prizePool) {
+  const drawnSet = new Set(drawnNumbers);
+  const prizes = [];
+
+  // Check Jaldhi 5 (first 5 numbers) - 10%
+  if (markedNumbers.length >= 5) {
+    prizes.push({
+      type: 'Jaldhi 5',
+      amount: Math.floor(prizePool * 0.10),
+      icon: '5️⃣'
+    });
+  }
+
+  // Check lines - 10% each
+  const lines = [0, 1, 2];
+  for (const lineIdx of lines) {
+    const lineNumbers = ticket[lineIdx].filter(n => n !== 0);
+    const markedInLine = lineNumbers.filter(n => markedNumbers.includes(n)).length;
+
+    if (markedInLine === lineNumbers.length) {
+      const lineName = lineIdx === 0 ? 'Top Line' : lineIdx === 1 ? 'Middle Line' : 'Bottom Line';
+      const lineIcon = lineIdx === 0 ? '⬆️' : lineIdx === 1 ? '➡️' : '⬇️';
+
+      prizes.push({
+        type: lineName,
+        amount: Math.floor(prizePool * 0.10),
+        icon: lineIcon
+      });
+    }
+  }
+
+  // Check Full Housie (all 15 numbers) - 30%
+  const totalNumbers = ticket.flat().filter(n => n !== 0).length;
+  const markedTotal = ticket.flat()
+    .filter(n => n !== 0)
+    .filter(n => markedNumbers.includes(n)).length;
+
+  if (markedTotal === totalNumbers) {
+    prizes.push({
+      type: 'Full Housie',
+      amount: Math.floor(prizePool * 0.30),
+      icon: '🏆'
+    });
+  }
+
+  return prizes;
+}
+
 // Game logic functions
 function generateJoinCode() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -55,38 +167,6 @@ function generateJoinCode() {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return code;
-}
-
-function generateTicket(index) {
-  const numbers = new Set();
-  const ranges = [
-    [1, 9], [10, 19], [20, 29], [30, 39], [40, 49],
-    [50, 59], [60, 69], [70, 79], [80, 90]
-  ];
-
-  const seed = index;
-  for (let col = 0; col < ranges.length; col++) {
-    const [min, max] = ranges[col];
-    const count = col < 6 ? 2 : 1;
-
-    for (let i = 0; i < count; i++) {
-      const range = max - min + 1;
-      const num = min + ((seed + col + i) % range);
-      numbers.add(num);
-    }
-  }
-
-  return Array.from(numbers).sort((a, b) => a - b).slice(0, 15);
-}
-
-function detectWin(markedNumbers, drawnNumbers) {
-  const drawnSet = new Set(drawnNumbers);
-  const matched = markedNumbers.filter(n => drawnSet.has(n));
-
-  if (matched.length >= 13) return 'FULL_HOUSE';
-  if (matched.length >= 10) return 'TWO_LINE';
-  if (matched.length >= 5) return 'SINGLE_LINE';
-  return null;
 }
 
 // Broadcast to all clients in a game
@@ -176,29 +256,43 @@ app.get('/api/games', (req, res) => {
 
 // Games - Create game
 app.post('/api/games/create', (req, res) => {
-  const { userId, username } = req.body;
+  const { userId, username, ticketCount, ticketPrice } = req.body;
 
-  if (!userId || !username) {
-    return res.status(400).json({ error: 'Missing userId or username' });
+  if (!userId || !username || !ticketCount || ticketPrice === undefined) {
+    return res.status(400).json({ error: 'Missing required fields' });
   }
 
   const joinCode = generateJoinCode();
+  const totalPoolAmount = ticketCount * ticketPrice;
+
   const game = {
     id: uuidv4(),
     joinCode,
     hostId: userId,
     hostName: username,
+    ticketPrice: ticketPrice,
+    prizePool: 0,
     players: {
       [userId]: {
         id: userId,
         name: username,
-        ticket: generateTicket(0),
-        markedNumbers: [],
-        status: 'JOINED'
+        tickets: generateTickets(ticketCount, 0),
+        status: 'JOINED',
+        amountPaid: ticketPrice * ticketCount,
+        claimedPrizes: []
       }
     },
     drawnNumbers: [],
+    drawnNumberSequence: [],
     status: 'WAITING',
+    prizes: {
+      'Jaldhi 5': null,
+      'Top Line': null,
+      'Middle Line': null,
+      'Bottom Line': null,
+      'Full Housie': null,
+      'Second Full Housie': null
+    },
     createdAt: new Date().toISOString(),
     startedAt: null,
     endedAt: null
@@ -213,16 +307,17 @@ app.post('/api/games/create', (req, res) => {
     game: {
       id: game.id,
       joinCode: game.joinCode,
-      hostName: game.hostName
+      hostName: game.hostName,
+      ticketPrice: ticketPrice
     }
   });
 });
 
 // Games - Join game
 app.post('/api/games/join', (req, res) => {
-  const { gameId, userId, username } = req.body;
+  const { gameId, userId, username, ticketCount } = req.body;
 
-  if (!gameId || !userId || !username) {
+  if (!gameId || !userId || !username || !ticketCount) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -246,13 +341,28 @@ app.post('/api/games/join', (req, res) => {
   }
 
   const playerIndex = Object.keys(game.players).length;
+  const usedNumbers = new Set();
+
+  // Collect all used numbers from other players' tickets
+  Object.values(game.players).forEach(player => {
+    player.tickets.forEach(ticket => {
+      ticket.grid.flat().forEach(num => {
+        if (num !== 0) usedNumbers.add(num);
+      });
+    });
+  });
+
+  // Generate tickets avoiding used numbers
   game.players[userId] = {
     id: userId,
     name: username,
-    ticket: generateTicket(playerIndex),
-    markedNumbers: [],
-    status: 'JOINED'
+    tickets: generateTickets(ticketCount, playerIndex),
+    status: 'JOINED',
+    amountPaid: ticketCount * game.ticketPrice,
+    claimedPrizes: []
   };
+
+  game.prizePool += ticketCount * game.ticketPrice;
 
   games[games.findIndex(g => g.id === gameId)] = game;
   writeJSON(GAMES_FILE, games);
@@ -262,7 +372,9 @@ app.post('/api/games/join', (req, res) => {
     game: {
       id: game.id,
       joinCode: game.joinCode,
-      players: Object.values(game.players)
+      players: Object.values(game.players),
+      ticketPrice: game.ticketPrice,
+      prizePool: game.prizePool
     }
   });
 });
@@ -330,6 +442,10 @@ wss.on('connection', (ws) => {
 
           const drawnNumber = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
           game.drawnNumbers.push(drawnNumber);
+          game.drawnNumberSequence.push({
+            number: drawnNumber,
+            time: new Date().toISOString()
+          });
 
           games[gameIndex] = game;
           writeJSON(GAMES_FILE, games);
@@ -337,45 +453,66 @@ wss.on('connection', (ws) => {
           broadcastToGame(gameId, {
             type: 'NUMBER_DRAWN',
             number: drawnNumber,
-            drawnCount: game.drawnNumbers.length
+            drawnCount: game.drawnNumbers.length,
+            sequence: game.drawnNumberSequence
           });
           break;
 
         case 'MARK_NUMBER':
           if (!game.players[userId]) return;
 
-          const { number } = payload;
-          if (!game.players[userId].markedNumbers.includes(number)) {
-            game.players[userId].markedNumbers.push(number);
-          }
+          const { ticketId, number } = payload;
+          const ticket = game.players[userId].tickets.find(t => t.id === ticketId);
 
-          const winType = detectWin(
-            game.players[userId].markedNumbers,
-            game.drawnNumbers
-          );
+          if (ticket && !ticket.markedNumbers.includes(number)) {
+            ticket.markedNumbers.push(number);
+          }
 
           games[gameIndex] = game;
           writeJSON(GAMES_FILE, games);
 
           ws.send(JSON.stringify({
             type: 'MARK_CONFIRMED',
-            number: number,
-            winType: winType
+            number: number
           }));
           break;
 
         case 'CLAIM_WIN':
-          const playerWinType = detectWin(
-            game.players[userId].markedNumbers,
-            game.drawnNumbers
-          );
+          const { ticketId: claimTicketId, prizeType } = payload;
+          const claimTicket = game.players[userId].tickets.find(t => t.id === claimTicketId);
 
-          broadcastToGame(gameId, {
-            type: 'WIN_CLAIMED',
-            playerId: userId,
-            playerName: game.players[userId].name,
-            winType: playerWinType
-          });
+          if (claimTicket) {
+            const prizes = detectPrizes(claimTicket.markedNumbers, game.drawnNumbers, claimTicket.grid, game.prizePool);
+            const prizeMatch = prizes.find(p => p.type === prizeType);
+
+            if (prizeMatch && !game.prizes[prizeType]) {
+              game.prizes[prizeType] = {
+                playerId: userId,
+                playerName: game.players[userId].name,
+                ticketId: claimTicketId,
+                amount: prizeMatch.amount,
+                claimedAt: new Date().toISOString()
+              };
+              game.players[userId].claimedPrizes.push({
+                type: prizeType,
+                amount: prizeMatch.amount,
+                icon: prizeMatch.icon
+              });
+
+              games[gameIndex] = game;
+              writeJSON(GAMES_FILE, games);
+
+              broadcastToGame(gameId, {
+                type: 'PRIZE_CLAIMED',
+                playerId: userId,
+                playerName: game.players[userId].name,
+                prizeType: prizeType,
+                amount: prizeMatch.amount,
+                icon: prizeMatch.icon,
+                prizes: game.prizes
+              });
+            }
+          }
           break;
 
         case 'START_GAME':

@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -37,6 +37,31 @@
         .header h1 {
             color: #667eea;
             font-size: 24px;
+        }
+
+        .prize-pool-display {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 10px 20px;
+            background: #f0f1ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .pool-item {
+            text-align: center;
+        }
+
+        .pool-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .pool-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
         }
 
         .header-actions {
@@ -87,7 +112,7 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 300px 1fr 350px;
             gap: 20px;
         }
 
@@ -96,6 +121,8 @@
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .panel h2 {
@@ -140,82 +167,187 @@
             color: #999;
         }
 
-        .numbers-grid {
-            display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
+        .drawn-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
 
-        .number-btn {
-            width: 40px;
-            height: 40px;
+        .drawn-numbers {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .number-badge {
+            width: 100%;
+            aspect-ratio: 1;
             border: 2px solid #ddd;
             border-radius: 6px;
             background: white;
             color: #333;
             font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 12px;
         }
 
-        .number-btn:hover {
-            border-color: #667eea;
-        }
-
-        .number-btn.drawn {
+        .number-badge.drawn {
             background: #667eea;
             color: white;
             border-color: #667eea;
         }
 
-        .ticket-grid {
+        .fullscreen-number {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(102, 126, 234, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            font-weight: bold;
+            color: white;
+            z-index: 9999;
+            animation: fadeInOut 3s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            20%, 80% { opacity: 1; }
+        }
+
+        .prize-board {
+            background: #f0f1ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .prize-item {
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            border-left: 4px solid #ffc107;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .prize-item.claimed {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .prize-icon {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        .prize-info {
+            flex: 1;
+        }
+
+        .prize-amount {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .tickets-container {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 15px;
             margin-top: 15px;
         }
 
-        .ticket-number {
+        .ticket {
+            border: 2px solid #667eea;
+            border-radius: 8px;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            text-align: center;
+            background: white;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .ticket-title {
             font-weight: bold;
+            color: #667eea;
+            font-size: 13px;
+        }
+
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 4px;
+        }
+
+        .ticket-cell {
+            aspect-ratio: 1;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 9px;
             cursor: pointer;
             transition: all 0.2s ease;
             background: white;
         }
 
-        .ticket-number:hover {
+        .ticket-cell.number {
+            color: #333;
+        }
+
+        .ticket-cell.number:hover {
             border-color: #667eea;
-        }
-
-        .ticket-number.marked {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .player-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .player-badge {
-            padding: 8px 12px;
             background: #f0f1ff;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #667eea;
-            font-weight: 600;
         }
 
-        .player-badge.you {
+        .ticket-cell.number.marked {
             background: #667eea;
             color: white;
+            border-color: #667eea;
+        }
+
+        .ticket-cell.empty {
+            background: transparent;
+            border: none;
+        }
+
+        .claimed-badges {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .claimed-badge {
+            font-size: 16px;
+            display: inline-block;
+            padding: 2px 6px;
+            background: #fff3cd;
+            border-radius: 4px;
+            border: 1px solid #ffc107;
+        }
+
+        .claimed-badge.claimed {
+            background: #d4edda;
+            border-color: #28a745;
         }
 
         .modal {
@@ -249,6 +381,26 @@
             color: #667eea;
         }
 
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
         .modal-actions {
             display: flex;
             gap: 10px;
@@ -259,42 +411,7 @@
             flex: 1;
         }
 
-        .message {
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .message.show {
-            display: block;
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .info-card {
-            background: #f0f1ff;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-        }
-
-        .info-card strong {
-            color: #667eea;
-        }
-
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
@@ -304,51 +421,76 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎮 CloseHousie</h1>
+            <h1>🎮 CloseHousie Tambola</h1>
             <div class="header-actions">
                 <span id="username" style="color: #667eea; font-weight: 600;"></span>
                 <button class="btn btn-secondary btn-small" onclick="logout()">Logout</button>
             </div>
         </div>
 
+        <div id="prizePoolDisplay" class="prize-pool-display" style="display: none;">
+            <div class="pool-item">
+                <div class="pool-label">Total Pool</div>
+                <div class="pool-amount" id="poolAmount">₹0</div>
+            </div>
+            <div class="pool-item">
+                <div class="pool-label">Jaldhi 5 (10%)</div>
+                <div class="pool-amount" id="poolJaldhi">₹0</div>
+            </div>
+            <div class="pool-item">
+                <div class="pool-label">Lines (10%)</div>
+                <div class="pool-amount" id="poolLines">₹0</div>
+            </div>
+            <div class="pool-item">
+                <div class="pool-label">Full House (30%)</div>
+                <div class="pool-amount" id="poolFull">₹0</div>
+            </div>
+        </div>
+
         <div class="main-content">
-            <!-- Games Panel -->
+            <!-- Left Panel: Games List -->
             <div class="panel">
                 <h2>🎲 Games</h2>
-                <button class="btn btn-primary" style="margin-bottom: 15px;" onclick="openCreateGameModal()">+ Create Game</button>
+                <button class="btn btn-primary" style="margin-bottom: 15px; width: 100%;" onclick="openCreateGameModal()">+ Create Game</button>
                 <div id="gamesList" class="game-list">
                     <p style="color: #999; text-align: center;">Loading games...</p>
                 </div>
             </div>
 
-            <!-- Game Board Panel -->
+            <!-- Center Panel: Game Board -->
             <div class="panel">
                 <h2>📊 Game Board</h2>
                 <div id="gameContent" style="display: none;">
-                    <div class="info-card">
-                        <strong>Code:</strong> <span id="gameCode"></span>
+                    <div style="background: #f0f1ff; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #667eea;">
+                        <strong>Code:</strong> <span id="gameCode" style="color: #667eea; font-size: 18px;"></span>
                         <br>
-                        <strong>Status:</strong> <span id="gameStatus"></span>
-                        <br>
+                        <strong>Status:</strong> <span id="gameStatus"></span> |
                         <strong>Players:</strong> <span id="playerCount"></span>
                     </div>
 
-                    <h3 style="margin-top: 15px; margin-bottom: 10px; font-size: 14px;">Drawn Numbers</h3>
-                    <div class="numbers-grid" id="drawnNumbers"></div>
-
-                    <h3 style="margin-top: 15px; margin-bottom: 10px; font-size: 14px;">Your Ticket</h3>
-                    <div class="ticket-grid" id="ticketGrid"></div>
-
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button id="startBtn" class="btn btn-primary" onclick="startGame()" style="display: none;">Start Game</button>
-                        <button id="drawBtn" class="btn btn-primary" onclick="drawNumber()" style="display: none;">Draw Number</button>
-                        <button id="claimBtn" class="btn btn-secondary" onclick="claimWin()" style="display: none;">Claim Win</button>
-                        <button id="endBtn" class="btn btn-danger" onclick="endGame()" style="display: none;">End Game</button>
+                    <div class="drawn-section">
+                        <strong style="color: #667eea;">Drawn Numbers: <span id="drawnCount">0</span>/90</strong>
+                        <div class="drawn-numbers" id="drawnNumbers"></div>
                     </div>
+
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <button id="startBtn" class="btn btn-primary" onclick="startGame()" style="display: none; flex: 1;">▶️ Start Game</button>
+                        <button id="drawBtn" class="btn btn-primary" onclick="drawNumber()" style="display: none; flex: 1;">🎲 Draw Number</button>
+                        <button id="endBtn" class="btn btn-danger" onclick="endGame()" style="display: none; flex: 1;">⏹️ End Game</button>
+                    </div>
+
+                    <h3 style="margin-top: 15px; margin-bottom: 10px; font-size: 14px; color: #667eea;">🎫 Your Tickets</h3>
+                    <div class="tickets-container" id="ticketsContainer"></div>
                 </div>
                 <div id="noGameContent" style="text-align: center; color: #999;">
                     <p>Select a game or create a new one to start playing</p>
                 </div>
+            </div>
+
+            <!-- Right Panel: Prizes -->
+            <div class="panel">
+                <h2>💎 Prizes</h2>
+                <div id="prizesList" class="prize-board"></div>
             </div>
         </div>
     </div>
@@ -357,7 +499,28 @@
     <div id="createGameModal" class="modal">
         <div class="modal-content">
             <h2>Create New Game</h2>
-            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">A random 4-digit code will be generated for other players to join.</p>
+
+            <div class="form-group">
+                <label>Number of Tickets</label>
+                <select id="ticketCount">
+                    <option value="1">1 Ticket</option>
+                    <option value="2">2 Tickets</option>
+                    <option value="3">3 Tickets</option>
+                    <option value="4">4 Tickets</option>
+                    <option value="5">5 Tickets</option>
+                    <option value="6">6 Tickets</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Ticket Price (₹)</label>
+                <input type="number" id="ticketPrice" placeholder="Enter price per ticket" min="1" value="100">
+            </div>
+
+            <p style="color: #666; font-size: 12px; margin-bottom: 15px;">
+                Price per ticket determines the total prize pool. Share the generated code with other players to join.
+            </p>
+
             <div class="modal-actions">
                 <button class="btn btn-primary" onclick="confirmCreateGame()">Create</button>
                 <button class="btn btn-secondary" onclick="closeModal('createGameModal')">Cancel</button>
@@ -377,6 +540,21 @@
 
         document.getElementById('username').textContent = 'Welcome, ' + username;
 
+        function formatCurrency(amount) {
+            return '₹' + Math.floor(amount).toLocaleString('en-IN');
+        }
+
+        function updatePrizePool() {
+            if (!currentGame) return;
+
+            const pool = currentGame.prizePool || 0;
+            document.getElementById('poolAmount').textContent = formatCurrency(pool);
+            document.getElementById('poolJaldhi').textContent = formatCurrency(pool * 0.10);
+            document.getElementById('poolLines').textContent = formatCurrency(pool * 0.10);
+            document.getElementById('poolFull').textContent = formatCurrency(pool * 0.30);
+            document.getElementById('prizePoolDisplay').style.display = 'flex';
+        }
+
         function loadGames() {
             fetch('/api/games')
                 .then(r => r.json())
@@ -392,6 +570,7 @@
                             <div class="game-code">${game.joinCode}</div>
                             <div style="font-size: 12px; margin-bottom: 5px;">Host: <strong>${game.hostName}</strong></div>
                             <div class="game-status">Players: ${Object.keys(game.players).length}/5 • ${game.status}</div>
+                            <div style="font-size: 11px; color: #667eea; margin-top: 5px;">Ticket: ${formatCurrency(game.ticketPrice)}</div>
                         </div>
                     `).join('');
                 });
@@ -404,7 +583,19 @@
                     currentGame = game;
                     renderGameBoard();
                     connectWebSocket();
+                    updatePrizePool();
                 });
+        }
+
+        function displayNumberFullscreen(number) {
+            const overlay = document.createElement('div');
+            overlay.className = 'fullscreen-number';
+            overlay.textContent = number;
+            document.body.appendChild(overlay);
+
+            setTimeout(() => {
+                overlay.remove();
+            }, 3000);
         }
 
         function renderGameBoard() {
@@ -419,33 +610,105 @@
             document.getElementById('gameCode').textContent = currentGame.joinCode;
             document.getElementById('gameStatus').textContent = currentGame.status;
             document.getElementById('playerCount').textContent = Object.keys(currentGame.players).length;
+            document.getElementById('drawnCount').textContent = currentGame.drawnNumbers.length;
 
             // Render drawn numbers
             let drawnHtml = '';
             for (let i = 1; i <= 90; i++) {
                 const isDrawn = currentGame.drawnNumbers.includes(i);
-                drawnHtml += `<button class="number-btn ${isDrawn ? 'drawn' : ''}" ${isDrawn ? 'disabled' : ''}>${i}</button>`;
+                drawnHtml += `<div class="number-badge ${isDrawn ? 'drawn' : ''}">${i}</div>`;
             }
             document.getElementById('drawnNumbers').innerHTML = drawnHtml;
 
-            // Render player's ticket
-            const playerTicket = currentGame.players[userId]?.ticket || [];
-            const markedNumbers = currentGame.players[userId]?.markedNumbers || [];
-            const ticketHtml = playerTicket.map(num => `
-                <div class="ticket-number ${markedNumbers.includes(num) ? 'marked' : ''}" onclick="markNumber(${num})">
-                    ${num}
-                </div>
-            `).join('');
-            document.getElementById('ticketGrid').innerHTML = ticketHtml;
+            // Render prizes
+            const prizesList = document.getElementById('prizesList');
+            const prizeDescriptions = {
+                'Jaldhi 5': { icon: '5️⃣', desc: 'First 5 Numbers' },
+                'Top Line': { icon: '⬆️', desc: 'Top Row' },
+                'Middle Line': { icon: '➡️', desc: 'Middle Row' },
+                'Bottom Line': { icon: '⬇️', desc: 'Bottom Row' },
+                'Full Housie': { icon: '🏆', desc: '1st Full House' },
+                'Second Full Housie': { icon: '🥈', desc: '2nd Full House' }
+            };
 
-            // Show/hide buttons based on role and status
+            let prizeHtml = '';
+            Object.entries(currentGame.prizes).forEach(([prize, winner]) => {
+                const desc = prizeDescriptions[prize];
+                const amount = currentGame.prizePool ? (
+                    prize === 'Full Housie' ? Math.floor(currentGame.prizePool * 0.30) :
+                    prize === 'Second Full Housie' ? Math.floor(currentGame.prizePool * 0.20) :
+                    ['Top Line', 'Middle Line', 'Bottom Line'].includes(prize) ? Math.floor(currentGame.prizePool * 0.10) :
+                    Math.floor(currentGame.prizePool * 0.10)
+                ) : 0;
+
+                prizeHtml += `
+                    <div class="prize-item ${winner ? 'claimed' : ''}">
+                        <span class="prize-icon">${desc.icon}</span>
+                        <div class="prize-info">
+                            <strong>${prize}</strong><br>
+                            <small>${desc.desc}</small>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="prize-amount">${formatCurrency(amount)}</div>
+                            ${winner ? `<small style="color: #28a745;"><strong>✓ ${winner.playerName}</strong></small>` : '<small style="color: #999;">Unclaimed</small>'}
+                        </div>
+                    </div>
+                `;
+            });
+
+            prizesList.innerHTML = prizeHtml;
+
+            // Render player's tickets
+            const playerTickets = currentGame.players[userId]?.tickets || [];
+            const ticketsHtml = playerTickets.map((ticket, idx) => {
+                const grid = ticket.grid;
+                const markedNumbers = ticket.markedNumbers;
+                const ticketNumbers = grid.flat().filter(n => n !== 0);
+
+                let cellsHtml = '';
+                for (let row = 0; row < 3; row++) {
+                    for (let col = 0; col < 9; col++) {
+                        const num = grid[row][col];
+                        if (num === 0) {
+                            cellsHtml += '<div class="ticket-cell empty"></div>';
+                        } else {
+                            const isMarked = markedNumbers.includes(num);
+                            cellsHtml += `
+                                <div class="ticket-cell number ${isMarked ? 'marked' : ''}"
+                                     onclick="markNumber('${ticket.id}', ${num})"
+                                     title="Click to mark/unmark">
+                                    ${num}
+                                </div>
+                            `;
+                        }
+                    }
+                }
+
+                const claimedBadges = ticket.claimedPrizes.map(p =>
+                    `<div class="claimed-badge claimed" title="${p.type}">${p.icon}</div>`
+                ).join('');
+
+                return `
+                    <div class="ticket">
+                        <div class="ticket-header">
+                            <span class="ticket-title">Ticket ${idx + 1}</span>
+                            <span style="font-size: 12px; color: #999;">${markedNumbers.length}/${ticketNumbers.length}</span>
+                        </div>
+                        <div class="ticket-grid">${cellsHtml}</div>
+                        ${claimedBadges ? `<div class="claimed-badges">${claimedBadges}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('ticketsContainer').innerHTML = ticketsHtml;
+
+            // Show/hide buttons
             const isHost = currentGame.hostId === userId;
             const isWaiting = currentGame.status === 'WAITING';
             const isInProgress = currentGame.status === 'IN_PROGRESS';
 
             document.getElementById('startBtn').style.display = (isHost && isWaiting) ? 'block' : 'none';
             document.getElementById('drawBtn').style.display = (isHost && isInProgress) ? 'block' : 'none';
-            document.getElementById('claimBtn').style.display = (!isHost && isInProgress) ? 'block' : 'none';
             document.getElementById('endBtn').style.display = (isHost && isInProgress) ? 'block' : 'none';
         }
 
@@ -470,24 +733,39 @@
                     case 'GAME_STATE':
                         currentGame = message.game;
                         renderGameBoard();
+                        updatePrizePool();
                         break;
 
                     case 'NUMBER_DRAWN':
                         if (currentGame) {
-                            currentGame.drawnNumbers.push(message.number);
+                            currentGame.drawnNumbers = message.sequence.map(s => s.number);
                             renderGameBoard();
+                            displayNumberFullscreen(message.number);
                         }
                         break;
 
                     case 'PLAYER_JOINED':
                         if (currentGame) {
                             currentGame.players[message.player.id] = message.player;
+                            updatePrizePool();
                             renderGameBoard();
                         }
                         break;
 
-                    case 'WIN_CLAIMED':
-                        alert(`🎉 ${message.playerName} claimed a ${message.winType}!`);
+                    case 'PRIZE_CLAIMED':
+                        if (currentGame) {
+                            currentGame.prizes = message.prizes;
+                            const player = currentGame.players[message.playerId];
+                            if (player) {
+                                player.claimedPrizes.push({
+                                    type: message.prizeType,
+                                    amount: message.amount,
+                                    icon: message.icon
+                                });
+                            }
+                            renderGameBoard();
+                            alert(`🎉 ${message.playerName} won ${message.prizeType}!\n💰 Amount: ${formatCurrency(message.amount)}`);
+                        }
                         break;
 
                     case 'GAME_STARTED':
@@ -503,13 +781,14 @@
             };
         }
 
-        function markNumber(num) {
-            if (!ws) return;
+        function markNumber(ticketId, num) {
+            if (!ws || currentGame.status !== 'IN_PROGRESS') return;
 
             ws.send(JSON.stringify({
                 type: 'MARK_NUMBER',
                 gameId: currentGame.id,
                 userId: userId,
+                ticketId: ticketId,
                 number: num
             }));
         }
@@ -519,16 +798,6 @@
 
             ws.send(JSON.stringify({
                 type: 'DRAW_NUMBER',
-                gameId: currentGame.id,
-                userId: userId
-            }));
-        }
-
-        function claimWin() {
-            if (!ws) return;
-
-            ws.send(JSON.stringify({
-                type: 'CLAIM_WIN',
                 gameId: currentGame.id,
                 userId: userId
             }));
@@ -545,13 +814,15 @@
         }
 
         function endGame() {
-            if (!ws) return;
+            if (confirm('Are you sure you want to end the game?')) {
+                if (!ws) return;
 
-            ws.send(JSON.stringify({
-                type: 'END_GAME',
-                gameId: currentGame.id,
-                userId: userId
-            }));
+                ws.send(JSON.stringify({
+                    type: 'END_GAME',
+                    gameId: currentGame.id,
+                    userId: userId
+                }));
+            }
         }
 
         function openCreateGameModal() {
@@ -563,10 +834,18 @@
         }
 
         async function confirmCreateGame() {
+            const ticketCount = parseInt(document.getElementById('ticketCount').value);
+            const ticketPrice = parseInt(document.getElementById('ticketPrice').value);
+
+            if (!ticketPrice || ticketPrice < 1) {
+                alert('Please enter a valid ticket price');
+                return;
+            }
+
             const response = await fetch('/api/games/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, username })
+                body: JSON.stringify({ userId, username, ticketCount, ticketPrice })
             });
 
             const data = await response.json();
@@ -575,6 +854,7 @@
 
             if (data.success) {
                 selectGame(data.game.id);
+                alert(`✅ Game created!\nCode: ${data.game.joinCode}\nTicket Price: ${formatCurrency(ticketPrice)}`);
             }
         }
 
@@ -583,7 +863,6 @@
             window.location.href = '/';
         }
 
-        // Load games on startup
         loadGames();
         setInterval(loadGames, 3000);
     </script>
