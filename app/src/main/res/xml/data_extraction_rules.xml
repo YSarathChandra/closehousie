@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <domain-config>
+        <domain name="shared_pref" requireUserAction="true">
+            <path name=".*" />
+        </domain>
+        <domain name="file" requireUserAction="true">
+            <path name=".*" />
+        </domain>
+        <domain name="database" requireUserAction="true">
+            <path name=".*" />
+        </domain>
+    </domain-config>
+</data-extraction-rules>

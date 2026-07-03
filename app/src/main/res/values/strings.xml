@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CloseHousie</string>
+    <string name="create_game">Create Game</string>
+    <string name="join_game">Join Game</string>
+    <string name="draw_number">Draw Number</string>
+    <string name="claim_win">Claim Win</string>
+    <string name="game_code">Game Code</string>
+    <string name="players">Players</string>
+</resources>
