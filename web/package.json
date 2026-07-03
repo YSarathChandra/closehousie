@@ -1,0 +1,24 @@
+{
+  "name": "closehousie-web",
+  "version": "1.0.0",
+  "description": "Web-based Tambola game with admin panel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["tambola", "housie", "bingo", "game"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "ws": "^8.14.0",
+    "uuid": "^9.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
