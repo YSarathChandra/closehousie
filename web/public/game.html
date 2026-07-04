@@ -112,8 +112,54 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 300px 1fr 350px;
+            grid-template-columns: 280px 1fr 280px 280px;
             gap: 20px;
+        }
+
+        .player-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .player-item {
+            padding: 12px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .player-name {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .player-details {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .player-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .prize-badge {
+            font-size: 14px;
+            padding: 2px 6px;
+            background: #fff3cd;
+            border-radius: 4px;
+            border: 1px solid #ffc107;
+        }
+
+        .prize-badge.claimed {
+            background: #d4edda;
+            border-color: #28a745;
         }
 
         .panel {
@@ -411,9 +457,19 @@
             flex: 1;
         }
 
+        @media (max-width: 1600px) {
+            .main-content {
+                grid-template-columns: 250px 1fr 250px;
+            }
+        }
+
         @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
+            }
+
+            .panel {
+                max-height: 400px;
             }
         }
     </style>
@@ -487,10 +543,51 @@
                 </div>
             </div>
 
+            <!-- Right-Middle Panel: Players -->
+            <div class="panel">
+                <h2>👥 Players</h2>
+                <div id="playersList" class="player-list">
+                    <p style="color: #999; text-align: center; font-size: 12px;">No players joined yet</p>
+                </div>
+            </div>
+
             <!-- Right Panel: Prizes -->
             <div class="panel">
                 <h2>💎 Prizes</h2>
                 <div id="prizesList" class="prize-board"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Join Game Modal -->
+    <div id="joinGameModal" class="modal">
+        <div class="modal-content">
+            <h2>Join Game <span id="joinModalCode" style="color: #667eea;"></span></h2>
+
+            <div class="form-group">
+                <label>Number of Tickets</label>
+                <select id="joinTicketCount">
+                    <option value="1">1 Ticket</option>
+                    <option value="2">2 Tickets</option>
+                    <option value="3">3 Tickets</option>
+                    <option value="4">4 Tickets</option>
+                    <option value="5">5 Tickets</option>
+                    <option value="6">6 Tickets</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="joinPlayerName" placeholder="Enter your name" value="">
+            </div>
+
+            <p style="color: #666; font-size: 12px; margin-bottom: 15px;">
+                <strong>Ticket Price:</strong> <span id="joinTicketPrice"></span> each
+            </p>
+
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmJoinGame()">Join</button>
+                <button class="btn btn-secondary" onclick="closeModal('joinGameModal')">Cancel</button>
             </div>
         </div>
     </div>
@@ -555,6 +652,48 @@
             document.getElementById('prizePoolDisplay').style.display = 'flex';
         }
 
+        function renderPlayerList() {
+            if (!currentGame) return;
+
+            const playersList = document.getElementById('playersList');
+            const players = Object.values(currentGame.players);
+
+            if (players.length === 0) {
+                playersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 12px;">No players joined yet</p>';
+                return;
+            }
+
+            const prizeIcons = {
+                'Jaldhi 5': '5️⃣',
+                'Top Line': '⬆️',
+                'Middle Line': '➡️',
+                'Bottom Line': '⬇️',
+                'Full Housie': '🏆',
+                'Second Full Housie': '🥈'
+            };
+
+            playersList.innerHTML = players.map(player => {
+                const ticketCount = player.tickets ? player.tickets.length : 0;
+                const isHost = player.id === currentGame.hostId;
+                const prizeBadges = player.claimedPrizes
+                    .map(p => `<span class="prize-badge claimed" title="${p.type}">${prizeIcons[p.type] || '🎯'}</span>`)
+                    .join('');
+
+                return `
+                    <div class="player-item">
+                        <div class="player-name">
+                            ${isHost ? '👑' : '👤'} ${player.name}
+                            ${isHost ? '<span style="font-size: 10px; color: #999;">(Host)</span>' : ''}
+                        </div>
+                        <div class="player-details">
+                            🎫 ${ticketCount} ticket${ticketCount !== 1 ? 's' : ''}
+                        </div>
+                        ${prizeBadges ? `<div class="player-badges">${prizeBadges}</div>` : '<div style="font-size: 11px; color: #999;">No prizes claimed</div>'}
+                    </div>
+                `;
+            }).join('');
+        }
+
         function loadGames() {
             fetch('/api/games')
                 .then(r => r.json())
@@ -565,25 +704,60 @@
                         return;
                     }
 
-                    list.innerHTML = games.map(game => `
-                        <div class="game-item" onclick="selectGame('${game.id}')">
-                            <div class="game-code">${game.joinCode}</div>
-                            <div style="font-size: 12px; margin-bottom: 5px;">Host: <strong>${game.hostName}</strong></div>
-                            <div class="game-status">Players: ${Object.keys(game.players).length}/5 • ${game.status}</div>
-                            <div style="font-size: 11px; color: #667eea; margin-top: 5px;">Ticket: ${formatCurrency(game.ticketPrice)}</div>
-                        </div>
-                    `).join('');
+                    list.innerHTML = games.map(game => {
+                        const isPlayerInGame = game.players[userId] ? true : false;
+                        const playerCount = Object.keys(game.players).length;
+
+                        return `
+                            <div class="game-item ${isPlayerInGame ? 'active' : ''}" ${isPlayerInGame ? `onclick="selectGame('${game.id}')"` : ''}>
+                                <div class="game-code">${game.joinCode}</div>
+                                <div style="font-size: 12px; margin-bottom: 5px;">Host: <strong>${game.hostName}</strong></div>
+                                <div class="game-status">
+                                    Players: ${playerCount}/5 • ${game.status}
+                                </div>
+                                <div style="font-size: 11px; color: #667eea; margin-top: 5px;">
+                                    Ticket: ${formatCurrency(game.ticketPrice)}
+                                </div>
+                                ${isPlayerInGame
+                                    ? '<div style="font-size: 11px; color: #28a745; margin-top: 6px;">✓ You joined</div>'
+                                    : `<button class="btn btn-primary btn-small" style="width: 100%; margin-top: 8px;" onclick="event.stopPropagation(); openJoinModal('${game.id}', '${game.joinCode}', ${game.ticketPrice})">Join Game</button>`
+                                }
+                            </div>
+                        `;
+                    }).join('');
+                })
+                .catch(err => {
+                    console.error('Error loading games:', err);
                 });
         }
 
         function selectGame(gameId) {
             fetch(`/api/games/${gameId}`)
-                .then(r => r.json())
+                .then(r => {
+                    if (!r.ok) {
+                        alert('Failed to load game. Please try again.');
+                        return null;
+                    }
+                    return r.json();
+                })
                 .then(game => {
+                    if (!game) return;
+
+                    // Check if current user is in the game
+                    if (!game.players[userId]) {
+                        alert('You are not in this game. Please join first.');
+                        return;
+                    }
+
                     currentGame = game;
                     renderGameBoard();
+                    renderPlayerList();
                     connectWebSocket();
                     updatePrizePool();
+                })
+                .catch(err => {
+                    console.error('Error loading game:', err);
+                    alert('Error loading game: ' + err.message);
                 });
         }
 
@@ -611,6 +785,9 @@
             document.getElementById('gameStatus').textContent = currentGame.status;
             document.getElementById('playerCount').textContent = Object.keys(currentGame.players).length;
             document.getElementById('drawnCount').textContent = currentGame.drawnNumbers.length;
+
+            // Update player list
+            renderPlayerList();
 
             // Render drawn numbers
             let drawnHtml = '';
@@ -748,7 +925,8 @@
                         if (currentGame) {
                             currentGame.players[message.player.id] = message.player;
                             updatePrizePool();
-                            renderGameBoard();
+                            renderPlayerList();
+                            alert(`✅ ${message.player.name} joined with ${message.player.tickets.length} ticket(s)!`);
                         }
                         break;
 
@@ -764,6 +942,7 @@
                                 });
                             }
                             renderGameBoard();
+                            renderPlayerList();
                             alert(`🎉 ${message.playerName} won ${message.prizeType}!\n💰 Amount: ${formatCurrency(message.amount)}`);
                         }
                         break;
@@ -831,6 +1010,55 @@
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openJoinModal(gameId, gameCode, ticketPrice) {
+            document.getElementById('joinModalCode').textContent = gameCode;
+            document.getElementById('joinTicketPrice').textContent = formatCurrency(ticketPrice);
+            document.getElementById('joinPlayerName').value = username;
+            document.getElementById('joinGameModal').dataset.gameId = gameId;
+            document.getElementById('joinGameModal').classList.add('active');
+        }
+
+        async function confirmJoinGame() {
+            const gameId = document.getElementById('joinGameModal').dataset.gameId;
+            const ticketCount = parseInt(document.getElementById('joinTicketCount').value);
+            const playerName = document.getElementById('joinPlayerName').value.trim();
+
+            if (!playerName) {
+                alert('Please enter your name');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/games/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gameId,
+                        userId,
+                        username: playerName,
+                        ticketCount
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert('❌ ' + (data.error || 'Failed to join game'));
+                    return;
+                }
+
+                closeModal('joinGameModal');
+                alert(`✅ Joined game!\nTickets: ${ticketCount}`);
+
+                // Reload games and select this game
+                loadGames();
+                setTimeout(() => selectGame(gameId), 500);
+            } catch (err) {
+                console.error('Join error:', err);
+                alert('Error joining game: ' + err.message);
+            }
         }
 
         async function confirmCreateGame() {
