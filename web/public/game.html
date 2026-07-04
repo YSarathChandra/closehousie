@@ -727,6 +727,15 @@
                     renderDrawnList();
                     break;
 
+                case 'CLAIM_RESULT':
+                    if (msg.success) {
+                        alert(`✅ ${msg.message}`);
+                        state.game.isDrawing = false;
+                    } else {
+                        alert(`❌ Claim failed: ${msg.reason}`);
+                    }
+                    break;
+
                 case 'PRIZE_CLAIMED':
                     state.game.prizes = msg.prizes;
                     state.game.leaderboard = msg.leaderboard || [];

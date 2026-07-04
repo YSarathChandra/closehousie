@@ -107,81 +107,68 @@ function generateTickets(count, playerIndex = 0) {
   return tickets;
 }
 
-// Prize Detection
-function detectPrizes(markedNumbers, ticket, prizePool, alreadyClaimed = []) {
-  const prizes = [];
+// Prize Validation - Check if marked numbers are valid AND drawn
+function validatePrize(markedNumbers, drawnNumbers, ticket, prizeType) {
   const markedSet = new Set(markedNumbers);
+  const drawnSet = new Set(drawnNumbers);
 
-  // Jaldhi 5 - First 5 numbers (10%)
-  if (markedNumbers.length >= 5 && !alreadyClaimed.includes('Jaldhi 5')) {
-    prizes.push({
-      type: 'Jaldhi 5',
-      icon: '5️⃣',
-      amount: Math.floor(prizePool * 0.10)
-    });
+  // Check if all marked numbers have been drawn
+  const allMarkedAreDrawn = markedNumbers.every(n => drawnSet.has(n));
+  if (!allMarkedAreDrawn) {
+    return { valid: false, reason: 'Not all marked numbers have been drawn' };
   }
 
-  // Top Line (10%)
-  if (!alreadyClaimed.includes('Top Line')) {
-    const topLine = ticket[0].filter(n => n !== 0);
-    if (topLine.length > 0 && topLine.every(n => markedSet.has(n))) {
-      prizes.push({
-        type: 'Top Line',
-        icon: '⬆️',
-        amount: Math.floor(prizePool * 0.10)
-      });
+  // Check prize requirements
+  switch (prizeType) {
+    case 'Jaldhi 5':
+      if (markedNumbers.length >= 5) {
+        return { valid: true };
+      }
+      return { valid: false, reason: 'Need 5+ marked numbers' };
+
+    case 'Top Line': {
+      const topLine = ticket[0].filter(n => n !== 0);
+      if (topLine.length > 0 && topLine.every(n => markedSet.has(n))) {
+        return { valid: true };
+      }
+      return { valid: false, reason: 'All top row numbers not marked' };
     }
-  }
 
-  // Middle Line (10%)
-  if (!alreadyClaimed.includes('Middle Line')) {
-    const midLine = ticket[1].filter(n => n !== 0);
-    if (midLine.length > 0 && midLine.every(n => markedSet.has(n))) {
-      prizes.push({
-        type: 'Middle Line',
-        icon: '➡️',
-        amount: Math.floor(prizePool * 0.10)
-      });
+    case 'Middle Line': {
+      const midLine = ticket[1].filter(n => n !== 0);
+      if (midLine.length > 0 && midLine.every(n => markedSet.has(n))) {
+        return { valid: true };
+      }
+      return { valid: false, reason: 'All middle row numbers not marked' };
     }
-  }
 
-  // Bottom Line (10%)
-  if (!alreadyClaimed.includes('Bottom Line')) {
-    const botLine = ticket[2].filter(n => n !== 0);
-    if (botLine.length > 0 && botLine.every(n => markedSet.has(n))) {
-      prizes.push({
-        type: 'Bottom Line',
-        icon: '⬇️',
-        amount: Math.floor(prizePool * 0.10)
-      });
+    case 'Bottom Line': {
+      const botLine = ticket[2].filter(n => n !== 0);
+      if (botLine.length > 0 && botLine.every(n => markedSet.has(n))) {
+        return { valid: true };
+      }
+      return { valid: false, reason: 'All bottom row numbers not marked' };
     }
-  }
 
-  // Full Housie - All 15 numbers (30%)
-  if (!alreadyClaimed.includes('Full Housie')) {
-    const allNums = ticket.flat().filter(n => n !== 0);
-    if (allNums.length === 15 && allNums.every(n => markedSet.has(n))) {
-      prizes.push({
-        type: 'Full Housie',
-        icon: '🏆',
-        amount: Math.floor(prizePool * 0.30)
-      });
+    case 'Full Housie': {
+      const allNums = ticket.flat().filter(n => n !== 0);
+      if (allNums.length === 15 && allNums.every(n => markedSet.has(n))) {
+        return { valid: true };
+      }
+      return { valid: false, reason: 'All 15 numbers not marked' };
     }
-  }
 
-  // Second Full Housie - All 15 numbers again (20%, only if someone already won Full Housie)
-  if (!alreadyClaimed.includes('Second Full Housie')) {
-    const allNums = ticket.flat().filter(n => n !== 0);
-    if (allNums.length === 15 && allNums.every(n => markedSet.has(n))) {
-      prizes.push({
-        type: 'Second Full Housie',
-        icon: '🥈',
-        amount: Math.floor(prizePool * 0.20)
-      });
+    case 'Second Full Housie': {
+      const allNums = ticket.flat().filter(n => n !== 0);
+      if (allNums.length === 15 && allNums.every(n => markedSet.has(n))) {
+        return { valid: true };
+      }
+      return { valid: false, reason: 'All 15 numbers not marked' };
     }
-  }
 
-  return prizes;
+    default:
+      return { valid: false, reason: 'Unknown prize type' };
+  }
 }
 
 // Broadcast to game
@@ -201,6 +188,18 @@ function generateJoinCode() {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return code;
+}
+
+function getIconForPrize(prizeType) {
+  const icons = {
+    'Jaldhi 5': '5️⃣',
+    'Top Line': '⬆️',
+    'Middle Line': '➡️',
+    'Bottom Line': '⬇️',
+    'Full Housie': '🏆',
+    'Second Full Housie': '🥈'
+  };
+  return icons[prizeType] || '❓';
 }
 
 // ============ AUTH ROUTES ============
@@ -480,51 +479,73 @@ wss.on('connection', (ws) => {
           const { ticketId, prizeType } = msg;
           const player = game.players[userId];
 
-          if (!player) break;
+          if (!player) {
+            ws.send(JSON.stringify({ type: 'CLAIM_RESULT', success: false, reason: 'Player not found' }));
+            break;
+          }
 
           const ticket = player.tickets.find(t => t.id === ticketId);
-          if (!ticket) break;
+          if (!ticket) {
+            ws.send(JSON.stringify({ type: 'CLAIM_RESULT', success: false, reason: 'Ticket not found' }));
+            break;
+          }
 
-          const available = detectPrizes(
-            ticket.markedNumbers,
-            ticket.grid,
-            game.prizePool,
-            player.claimedPrizes.map(p => p.type)
-          );
+          // Validate the prize claim
+          const validation = validatePrize(ticket.markedNumbers, game.drawnNumbers, ticket.grid, prizeType);
 
-          const prize = available.find(p => p.type === prizeType);
-          if (!prize) break;
+          if (!validation.valid) {
+            ws.send(JSON.stringify({
+              type: 'CLAIM_RESULT',
+              success: false,
+              reason: validation.reason
+            }));
+            break;
+          }
 
-          // Pause drawing
+          // PAUSE drawing immediately on claim attempt
           game.isDrawing = false;
+
+          // Calculate prize amount
+          const prizeAmount = (() => {
+            switch (prizeType) {
+              case 'Jaldhi 5': return Math.floor(game.prizePool * 0.10);
+              case 'Top Line':
+              case 'Middle Line':
+              case 'Bottom Line': return Math.floor(game.prizePool * 0.10);
+              case 'Full Housie': return Math.floor(game.prizePool * 0.30);
+              case 'Second Full Housie': return Math.floor(game.prizePool * 0.20);
+              default: return 0;
+            }
+          })();
 
           // Check if someone already won this prize
           if (!game.prizes[prizeType]) {
             // First winner
             game.prizes[prizeType] = {
-              winners: [{ playerId: userId, playerName: player.name, amount: prize.amount }],
-              icon: prize.icon
+              winners: [{ playerId: userId, playerName: player.name, amount: prizeAmount }],
+              icon: getIconForPrize(prizeType)
             };
           } else {
-            // Multiple winners - split amount
+            // Multiple winners - split amount equally
             const existingWinners = game.prizes[prizeType].winners || [];
             const totalWinners = existingWinners.length + 1;
-            const amountPerWinner = Math.floor(prize.amount / totalWinners);
+            const amountPerWinner = Math.floor(prizeAmount / totalWinners);
 
             game.prizes[prizeType] = {
               winners: [
                 ...existingWinners.map(w => ({ ...w, amount: amountPerWinner })),
                 { playerId: userId, playerName: player.name, amount: amountPerWinner }
               ],
-              icon: prize.icon
+              icon: getIconForPrize(prizeType)
             };
           }
 
           // Add to player's claimed prizes
+          const playerAmount = game.prizes[prizeType].winners.find(w => w.playerId === userId).amount;
           player.claimedPrizes.push({
             type: prizeType,
-            icon: prize.icon,
-            amount: game.prizes[prizeType].winners.find(w => w.playerId === userId).amount
+            icon: getIconForPrize(prizeType),
+            amount: playerAmount
           });
 
           // Build leaderboard
@@ -539,11 +560,25 @@ wss.on('connection', (ws) => {
           games[gameIdx] = game;
           writeJSON(GAMES_FILE, games);
 
+          // Notify all players of successful claim
           broadcastToGame(gameId, {
             type: 'PRIZE_CLAIMED',
+            playerId: userId,
+            playerName: player.name,
+            prizeType: prizeType,
             prizes: game.prizes,
-            leaderboard
+            leaderboard,
+            message: `${player.name} won ${prizeType}!`
           });
+
+          ws.send(JSON.stringify({
+            type: 'CLAIM_RESULT',
+            success: true,
+            prizeType: prizeType,
+            amount: playerAmount,
+            message: `Congratulations! You won ${prizeType}!`
+          }));
+
           break;
         }
 
