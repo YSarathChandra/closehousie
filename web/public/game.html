@@ -815,11 +815,14 @@
 
                     const isMarked = marked.has(n);
                     const isDrawn = g.drawnNumbers.includes(n);
-                    const canMark = g.status === 'WAITING' || (g.status === 'IN_PROGRESS' && isDrawn);
+                    const canMarkNumber = g.status === 'IN_PROGRESS' && isDrawn && !isMarked;
+
+                    let classes = 'cell';
+                    if (isMarked) classes += ' marked';
+                    if (!isDrawn && g.status === 'IN_PROGRESS') classes += ' disabled';
 
                     return `
-                        <div class="cell ${isMarked ? 'marked' : ''} ${!canMark && g.status === 'IN_PROGRESS' ? 'disabled' : ''}"
-                            onclick="${canMark && !isMarked && g.status === 'IN_PROGRESS' ? `mark('${t.id}', ${n})` : ''}">
+                        <div class="${classes}" data-ticket="${t.id}" data-number="${n}">
                             ${n}
                         </div>
                     `;
@@ -829,7 +832,7 @@
                 const prizeHtml = prizes.map(p => {
                     const claimed = g.prizes[p.type] !== undefined;
                     return `
-                        <button class="prize-btn" ${claimed ? 'disabled' : `onclick="claimPrize('${t.id}', '${p.type}')"}`} title="${p.type}">
+                        <button class="prize-btn" ${claimed ? 'disabled' : ''} data-ticket="${t.id}" data-prize="${p.type}" title="${p.type}">
                             ${p.icon}
                         </button>
                     `;
@@ -849,6 +852,25 @@
             }).join('');
 
             document.getElementById('ticketsGrid').innerHTML = html || '<div class="empty-msg">No tickets</div>';
+
+            // Attach event listeners
+            document.querySelectorAll('.cell:not(.empty)').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const ticketId = this.dataset.ticket;
+                    const number = parseInt(this.dataset.number);
+                    if (this.classList.contains('marked') || this.classList.contains('disabled')) return;
+                    mark(ticketId, number);
+                });
+            });
+
+            document.querySelectorAll('.prize-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const ticketId = this.dataset.ticket;
+                    const prizeType = this.dataset.prize;
+                    if (this.disabled) return;
+                    claimPrize(ticketId, prizeType);
+                });
+            });
         }
 
         function getPrizes(ticket, game) {
@@ -915,6 +937,16 @@
             if (state.game.status !== 'IN_PROGRESS') return;
             if (!state.game.drawnNumbers.includes(num)) return;
 
+            // Local optimistic update
+            const ticket = state.game.players[state.userId]?.tickets?.find(t => t.id === ticketId);
+            if (ticket && !ticket.markedNumbers.includes(num)) {
+                ticket.markedNumbers.push(num);
+            }
+
+            // Render immediately for user feedback
+            renderTickets();
+
+            // Send to server
             state.ws.send(JSON.stringify({
                 type: 'MARK_NUMBER',
                 gameId: state.gameId,
