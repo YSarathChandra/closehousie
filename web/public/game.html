@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambola Game - CloseHousie</title>
+    <title>CloseHousie - Tambola</title>
     <style>
         * {
             margin: 0;
@@ -15,36 +15,36 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 12px;
+            padding: 10px;
         }
 
         .container {
-            max-width: 1500px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             background: white;
             padding: 12px 16px;
             border-radius: 8px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .header-left h1 {
-            color: #667eea;
             font-size: 20px;
+            color: #667eea;
             margin-bottom: 4px;
         }
 
         .header-info {
-            display: flex;
-            gap: 20px;
             font-size: 12px;
             color: #666;
+            display: flex;
+            gap: 20px;
         }
 
         .header-actions {
@@ -57,9 +57,9 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: 600;
             font-size: 12px;
-            transition: all 0.3s ease;
+            font-weight: 600;
+            transition: all 0.2s;
         }
 
         .btn-primary {
@@ -76,15 +76,6 @@
             cursor: not-allowed;
         }
 
-        .btn-secondary {
-            background: #ddd;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #ccc;
-        }
-
         .btn-danger {
             background: #dc3545;
             color: white;
@@ -94,26 +85,31 @@
             background: #c82333;
         }
 
-        /* Main layout */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 180px 1fr 200px;
-            gap: 12px;
+        .btn-secondary {
+            background: #ddd;
+            color: #333;
         }
 
-        /* Left panel - Number board */
+        .layout {
+            display: grid;
+            grid-template-columns: 180px 1fr 200px;
+            gap: 10px;
+        }
+
+        /* Board Panel */
         .board-panel {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             max-height: calc(100vh - 120px);
             overflow-y: auto;
         }
 
-        .board-panel h3 {
+        .panel-title {
+            font-size: 13px;
+            font-weight: 600;
             color: #667eea;
-            font-size: 14px;
             margin-bottom: 8px;
             text-align: center;
         }
@@ -125,8 +121,7 @@
             margin-bottom: 12px;
         }
 
-        .board-dot {
-            width: 100%;
+        .dot {
             aspect-ratio: 1;
             background: #f0f0f0;
             border: 1px solid #ddd;
@@ -139,7 +134,7 @@
             font-weight: 600;
         }
 
-        .board-dot.drawn {
+        .dot.drawn {
             background: #667eea;
             color: white;
             border-color: #667eea;
@@ -149,12 +144,11 @@
             border-top: 1px solid #eee;
             padding-top: 8px;
             font-size: 11px;
-            color: #666;
         }
 
         .drawn-list h4 {
-            font-size: 12px;
-            margin-bottom: 4px;
+            font-size: 11px;
+            margin-bottom: 6px;
             color: #333;
         }
 
@@ -164,35 +158,29 @@
             gap: 4px;
         }
 
-        .drawn-number {
+        .drawn-num {
             background: #667eea;
             color: white;
             padding: 3px 6px;
             border-radius: 3px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
         }
 
-        /* Center panel - Tickets */
+        /* Tickets Panel */
         .tickets-panel {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             max-height: calc(100vh - 120px);
             overflow-y: auto;
-        }
-
-        .tickets-panel h3 {
-            color: #667eea;
-            font-size: 14px;
-            margin-bottom: 10px;
         }
 
         .tickets-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
+            gap: 10px;
         }
 
         .ticket {
@@ -200,7 +188,6 @@
             border: 2px solid #ddd;
             border-radius: 8px;
             padding: 10px;
-            position: relative;
         }
 
         .ticket.mine {
@@ -211,24 +198,15 @@
         .ticket-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .ticket-player {
             font-size: 11px;
-            font-weight: 600;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #ddd;
             color: #333;
+            font-weight: 600;
         }
 
-        .ticket-num {
-            font-size: 10px;
-            color: #999;
-        }
-
-        .prize-icons {
+        .prize-btns {
             display: flex;
             gap: 4px;
             flex-wrap: wrap;
@@ -245,26 +223,24 @@
             transition: all 0.2s;
         }
 
-        .prize-btn:hover {
+        .prize-btn:hover:not(:disabled) {
             background: #f0f0f0;
             transform: scale(1.1);
         }
 
-        .prize-btn.claimed {
-            background: #d4edda;
-            border-color: #28a745;
+        .prize-btn:disabled {
+            opacity: 0.4;
             cursor: not-allowed;
-            opacity: 0.6;
         }
 
         .ticket-grid {
             display: grid;
             grid-template-columns: repeat(9, 1fr);
             gap: 2px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
-        .ticket-cell {
+        .cell {
             aspect-ratio: 1;
             background: white;
             border: 1px solid #ddd;
@@ -272,107 +248,111 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: #333;
             cursor: pointer;
             transition: all 0.2s;
-            min-height: 28px;
+            min-height: 26px;
         }
 
-        .ticket-cell.empty {
+        .cell.empty {
             background: #f5f5f5;
             cursor: default;
             border-style: dashed;
         }
 
-        .ticket-cell.marked {
+        .cell.marked {
             background: #667eea;
             color: white;
             border-color: #667eea;
         }
 
-        .ticket-cell:hover:not(.empty):not(.marked) {
+        .cell.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .cell:hover:not(.empty):not(.marked):not(.disabled) {
             background: #e8eef9;
             border-color: #667eea;
         }
 
-        .ticket-cell.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .ticket-footer {
+        .ticket-info {
             font-size: 10px;
             color: #999;
             text-align: right;
         }
 
-        /* Right panel - Leaderboard */
+        /* Leaderboard Panel */
         .leaderboard-panel {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             max-height: calc(100vh - 120px);
             overflow-y: auto;
-        }
-
-        .leaderboard-panel h3 {
-            color: #667eea;
-            font-size: 14px;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .leaderboard-entry {
-            background: #f9f9f9;
-            border-left: 3px solid #667eea;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-        }
-
-        .entry-player {
-            font-weight: 600;
-            color: #333;
-            font-size: 12px;
-            margin-bottom: 4px;
-        }
-
-        .entry-prizes {
-            font-size: 10px;
-            color: #666;
-            line-height: 1.4;
-        }
-
-        .entry-prize-item {
-            margin-bottom: 2px;
-        }
-
-        .entry-total {
-            margin-top: 6px;
-            padding-top: 6px;
-            border-top: 1px solid #ddd;
-            font-weight: 600;
-            color: #28a745;
-            font-size: 11px;
         }
 
         .pool-info {
             background: #f0f4ff;
             border: 1px solid #667eea;
-            padding: 10px;
+            padding: 8px;
             border-radius: 6px;
-            margin-bottom: 12px;
-            font-size: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .pool-label {
+            font-size: 11px;
+            color: #666;
         }
 
         .pool-amount {
             font-size: 18px;
             font-weight: 700;
             color: #667eea;
-            margin: 4px 0;
+        }
+
+        .winner-card {
+            background: #f9f9f9;
+            border-left: 3px solid #667eea;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+
+        .winner-name {
+            font-weight: 600;
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .winner-prizes {
+            font-size: 10px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .prize-item {
+            margin-bottom: 2px;
+        }
+
+        .winner-total {
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid #ddd;
+            font-weight: 600;
+            color: #28a745;
+            font-size: 11px;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            padding: 20px 0;
         }
 
         /* Modal */
@@ -381,59 +361,87 @@
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
             align-items: center;
             justify-content: center;
         }
 
-        .modal.active {
+        .modal.show {
             display: flex;
         }
 
         .modal-content {
             background: white;
-            padding: 24px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 10px;
             max-width: 400px;
             width: 90%;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
         .modal h2 {
             color: #667eea;
             margin-bottom: 16px;
+            font-size: 18px;
+        }
+
+        .game-item {
+            padding: 10px;
+            background: #f9f9f9;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        .game-item-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        .game-item-info {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .game-item-btn {
+            width: 100%;
+            padding: 6px;
+            font-size: 11px;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            font-size: 12px;
-            margin-bottom: 6px;
+            font-size: 11px;
+            margin-bottom: 4px;
             color: #333;
             font-weight: 600;
         }
 
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ddd;
-            border-radius: 6px;
+            border-radius: 4px;
             font-size: 12px;
         }
 
         .form-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: flex-end;
+            margin-top: 16px;
         }
 
-        /* Scrollbar styling */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -448,139 +456,124 @@
             border-radius: 10px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #764ba2;
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .main-layout {
-                grid-template-columns: 150px 1fr 150px;
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 150px 1fr 140px;
                 gap: 8px;
             }
         }
 
         @media (max-width: 768px) {
-            .main-layout {
+            .layout {
                 grid-template-columns: 1fr;
             }
 
             .board-panel, .leaderboard-panel {
-                max-height: 300px;
+                max-height: 250px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <h1>🎮 CloseHousie Tambola</h1>
+                <h1>🎮 Tambola</h1>
                 <div class="header-info">
-                    <span>Code: <strong id="gameCode">-</strong></span>
-                    <span>Players: <strong id="playerCount">0/5</strong></span>
-                    <span>Status: <strong id="gameStatus">WAITING</strong></span>
+                    <span>Code: <strong id="code">-</strong></span>
+                    <span>Players: <strong id="players">0/5</strong></span>
+                    <span id="status-txt"></span>
                 </div>
             </div>
             <div class="header-actions">
-                <button id="startBtn" class="btn btn-primary" style="display: none;">▶️ Start</button>
-                <button id="resumeBtn" class="btn btn-primary" style="display: none;">⏯️ Resume</button>
-                <button id="endBtn" class="btn btn-danger" style="display: none;">⏹️ End Game</button>
+                <button id="startBtn" class="btn btn-primary" style="display:none">▶️ Start</button>
+                <button id="resumeBtn" class="btn btn-primary" style="display:none">⏯️ Resume</button>
+                <button id="endBtn" class="btn btn-danger" style="display:none">⏹️ End</button>
                 <button id="logoutBtn" class="btn btn-secondary">Logout</button>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-layout">
-            <!-- Left: Board -->
+        <div class="layout">
             <div class="board-panel">
-                <h3>🎲 Board (1-90)</h3>
+                <div class="panel-title">🎲 Board</div>
                 <div class="board-grid" id="boardGrid"></div>
                 <div class="drawn-list">
-                    <h4>Drawn Numbers</h4>
+                    <h4>Last Drawn</h4>
                     <div class="drawn-numbers" id="drawnList"></div>
                 </div>
             </div>
 
-            <!-- Center: Tickets -->
             <div class="tickets-panel">
-                <h3>🎫 Your Tickets</h3>
-                <div class="tickets-grid" id="ticketsContainer"></div>
+                <div class="panel-title">🎫 Your Tickets</div>
+                <div class="tickets-grid" id="ticketsGrid"></div>
             </div>
 
-            <!-- Right: Leaderboard -->
             <div class="leaderboard-panel">
-                <h3>🏆 Leaderboard</h3>
+                <div class="panel-title">🏆 Leaderboard</div>
                 <div class="pool-info">
-                    <div>Prize Pool</div>
-                    <div class="pool-amount">₹<span id="poolAmount">0</span></div>
+                    <div class="pool-label">Prize Pool</div>
+                    <div class="pool-amount">₹<span id="poolAmt">0</span></div>
                 </div>
-                <div id="leaderboard"></div>
-                <div id="noLeaderboard" style="text-align: center; color: #999; font-size: 12px;">
-                    No winners yet
-                </div>
+                <div id="leaderboardList"></div>
+                <div id="emptyBoard" class="empty-msg">No winners yet</div>
             </div>
         </div>
     </div>
 
     <!-- Modals -->
-    <div id="gameListModal" class="modal active">
+    <div id="gamesModal" class="modal show">
         <div class="modal-content">
-            <h2>🎮 Tambola Games</h2>
-            <div id="gamesList" style="max-height: 400px; overflow-y: auto; margin-bottom: 16px;"></div>
+            <h2>🎮 Games</h2>
+            <div id="gamesList" style="max-height:400px;overflow-y:auto;margin-bottom:16px"></div>
             <div class="form-actions">
-                <button class="btn btn-primary" onclick="openCreateGameModal()">➕ Create Game</button>
+                <button class="btn btn-primary" onclick="showCreateModal()">➕ Create</button>
             </div>
         </div>
     </div>
 
-    <div id="createGameModal" class="modal">
+    <div id="createModal" class="modal">
         <div class="modal-content">
             <h2>Create Game</h2>
             <div class="form-group">
-                <label>Ticket Count</label>
+                <label>Tickets</label>
                 <input type="number" id="createTickets" value="2" min="1" max="6">
             </div>
             <div class="form-group">
-                <label>Ticket Price (₹)</label>
+                <label>Price (₹)</label>
                 <input type="number" id="createPrice" value="100" min="10">
             </div>
             <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeCreateGameModal()">Cancel</button>
+                <button class="btn btn-secondary" onclick="hideCreateModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="createGame()">Create</button>
             </div>
         </div>
     </div>
 
-    <div id="joinGameModal" class="modal">
+    <div id="joinModal" class="modal">
         <div class="modal-content">
             <h2>Join Game</h2>
             <div class="form-group">
-                <label>Ticket Count</label>
+                <label>Tickets</label>
                 <input type="number" id="joinTickets" value="1" min="1" max="6">
             </div>
             <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeJoinGameModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="confirmJoinGame()">Join</button>
+                <button class="btn btn-secondary" onclick="hideJoinModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="joinGame()">Join</button>
             </div>
         </div>
     </div>
 
     <script>
-        let gameState = {
-            gameId: null,
+        let state = {
             userId: null,
             username: null,
+            gameId: null,
             isHost: false,
-            currentGame: null,
-            myTickets: [],
-            allTickets: {}
+            game: null,
+            ws: null,
+            selectedGameId: null
         };
 
-        let ws = null;
-
-        // Initialize
         function init() {
             const userId = localStorage.getItem('userId');
             const username = localStorage.getItem('username');
@@ -590,442 +583,374 @@
                 return;
             }
 
-            gameState.userId = userId;
-            gameState.username = username;
+            state.userId = userId;
+            state.username = username;
 
-            const gameId = new URLSearchParams(window.location.search).get('gameId');
-            if (gameId) {
-                gameState.gameId = gameId;
-                connectToGame();
-            } else {
-                loadGamesList();
-            }
+            loadGames();
+            document.getElementById('logoutBtn').onclick = logout;
+            document.getElementById('startBtn').onclick = startGame;
+            document.getElementById('resumeBtn').onclick = resumeGame;
+            document.getElementById('endBtn').onclick = endGame;
         }
 
-        // Load games list
-        async function loadGamesList() {
+        async function loadGames() {
             try {
                 const res = await fetch('/api/games');
                 const games = await res.json();
 
                 let html = '';
                 if (games.length === 0) {
-                    html = '<div style="text-align: center; color: #999; padding: 20px;">No active games</div>';
+                    html = '<div class="empty-msg">No active games</div>';
                 } else {
-                    games.forEach(game => {
-                        const playerCount = Object.keys(game.players || {}).length;
-                        const isJoined = game.players && game.players[gameState.userId];
+                    games.forEach(g => {
+                        const count = Object.keys(g.players || {}).length;
+                        const joined = g.players && g.players[state.userId];
                         html += `
-                            <div style="padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px;">
-                                <div style="font-weight: 600; color: #333; margin-bottom: 4px;">
-                                    ${game.hostName}'s Game - ₹${game.ticketPrice}/ticket
-                                </div>
-                                <div style="font-size: 11px; color: #666; margin-bottom: 6px;">
-                                    Code: <strong>${game.joinCode}</strong> | Players: ${playerCount}/5 | Status: ${game.status}
-                                </div>
-                                <button class="btn btn-primary" style="width: 100%; font-size: 11px; padding: 6px;"
-                                    onclick="openJoinModal('${game.id}', ${game.ticketPrice})">
-                                    ${isJoined ? '👁️ View Game' : '➕ Join Game'}
+                            <div class="game-item">
+                                <div class="game-item-title">${g.hostName} - ₹${g.ticketPrice}</div>
+                                <div class="game-item-info">Code: ${g.joinCode} | Players: ${count}/5 | ${g.status}</div>
+                                <button class="btn btn-primary game-item-btn" onclick="selectGame('${g.id}')">
+                                    ${joined ? '👁️ View' : '➕ Join'}
                                 </button>
                             </div>
                         `;
                     });
                 }
-
                 document.getElementById('gamesList').innerHTML = html;
             } catch (e) {
                 console.error('Error loading games:', e);
             }
         }
 
-        // Game modals
-        function openCreateGameModal() {
-            document.getElementById('gameListModal').classList.remove('active');
-            document.getElementById('createGameModal').classList.add('active');
+        function showCreateModal() {
+            document.getElementById('gamesModal').classList.remove('show');
+            document.getElementById('createModal').classList.add('show');
         }
 
-        function closeCreateGameModal() {
-            document.getElementById('createGameModal').classList.remove('active');
-            document.getElementById('gameListModal').classList.add('active');
+        function hideCreateModal() {
+            document.getElementById('createModal').classList.remove('show');
+            document.getElementById('gamesModal').classList.add('show');
         }
 
         async function createGame() {
-            const ticketCount = parseInt(document.getElementById('createTickets').value);
-            const ticketPrice = parseInt(document.getElementById('createPrice').value);
+            const tickets = parseInt(document.getElementById('createTickets').value);
+            const price = parseInt(document.getElementById('createPrice').value);
 
             try {
                 const res = await fetch('/api/games/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        userId: gameState.userId,
-                        username: gameState.username,
-                        ticketCount,
-                        ticketPrice
-                    })
+                    body: JSON.stringify({ userId: state.userId, username: state.username, ticketCount: tickets, ticketPrice: price })
                 });
 
-                const result = await res.json();
-                gameState.gameId = result.game.id;
-                gameState.isHost = true;
-                connectToGame();
+                const data = await res.json();
+                state.gameId = data.game.id;
+                state.isHost = true;
+                connectGame();
             } catch (e) {
-                alert('Error creating game: ' + e.message);
+                alert('Error: ' + e.message);
             }
         }
 
-        let targetGameId = null;
-
-        function openJoinModal(gameId, price) {
-            targetGameId = gameId;
-            document.getElementById('joinGameModal').classList.add('active');
+        function selectGame(gameId) {
+            state.selectedGameId = gameId;
+            document.getElementById('gamesModal').classList.remove('show');
+            document.getElementById('joinModal').classList.add('show');
         }
 
-        function closeJoinGameModal() {
-            document.getElementById('joinGameModal').classList.remove('active');
+        function hideJoinModal() {
+            document.getElementById('joinModal').classList.remove('show');
+            document.getElementById('gamesModal').classList.add('show');
         }
 
-        async function confirmJoinGame() {
-            const ticketCount = parseInt(document.getElementById('joinTickets').value);
+        async function joinGame() {
+            const tickets = parseInt(document.getElementById('joinTickets').value);
 
             try {
                 const res = await fetch('/api/games/join', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        gameId: targetGameId,
-                        userId: gameState.userId,
-                        username: gameState.username,
-                        ticketCount
+                        gameId: state.selectedGameId,
+                        userId: state.userId,
+                        username: state.username,
+                        ticketCount: tickets
                     })
                 });
 
                 if (!res.ok) {
-                    const error = await res.json();
-                    alert('Error: ' + error.error);
+                    const err = await res.json();
+                    alert(err.error);
                     return;
                 }
 
-                gameState.gameId = targetGameId;
-                closeJoinGameModal();
-                connectToGame();
+                state.gameId = state.selectedGameId;
+                connectGame();
             } catch (e) {
-                alert('Error joining game: ' + e.message);
+                alert('Error: ' + e.message);
             }
         }
 
-        // Connect to game via WebSocket
-        function connectToGame() {
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            ws = new WebSocket(`${protocol}//${window.location.host}`);
+        function connectGame() {
+            const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            state.ws = new WebSocket(`${proto}//${window.location.host}`);
 
-            ws.onopen = () => {
-                console.log('Connected to game');
-                ws.send(JSON.stringify({
-                    type: 'JOIN_GAME',
-                    gameId: gameState.gameId,
-                    userId: gameState.userId
-                }));
+            state.ws.onopen = () => {
+                state.ws.send(JSON.stringify({ type: 'JOIN_GAME', gameId: state.gameId, userId: state.userId }));
             };
 
-            ws.onmessage = (event) => {
-                const msg = JSON.parse(event.data);
-                handleMessage(msg);
+            state.ws.onmessage = (e) => {
+                const msg = JSON.parse(e.data);
+                handleMsg(msg);
             };
 
-            ws.onerror = (error) => {
-                console.error('WebSocket error:', error);
-            };
-
-            ws.onclose = () => {
-                console.log('Disconnected from game');
+            state.ws.onclose = () => {
+                console.log('Disconnected');
             };
         }
 
-        // Handle WebSocket messages
-        function handleMessage(msg) {
+        function handleMsg(msg) {
             switch (msg.type) {
                 case 'GAME_STATE':
-                    gameState.currentGame = msg.game;
-                    renderGame();
-                    break;
-
-                case 'PLAYER_JOINED':
-                    gameState.currentGame.players = msg.game?.players || gameState.currentGame.players;
-                    renderGame();
+                    state.game = msg.game;
+                    render();
                     break;
 
                 case 'GAME_STARTED':
-                    gameState.currentGame = msg.game;
-                    renderGame();
+                    state.game = msg.game;
+                    render();
                     break;
 
                 case 'NUMBER_DRAWN':
-                    gameState.currentGame.drawnNumbers = msg.drawnNumbers || gameState.currentGame.drawnNumbers;
-                    gameState.currentGame.drawnNumberSequence = msg.sequence;
+                    state.game.drawnNumbers = msg.drawnNumbers;
                     renderBoard();
                     renderDrawnList();
                     break;
 
                 case 'PRIZE_CLAIMED':
-                    gameState.currentGame.prizes = msg.prizes;
-                    gameState.currentGame.leaderboard = msg.leaderboard;
-                    gameState.currentGame.isDrawing = false;
-                    renderGame();
+                    state.game.prizes = msg.prizes;
+                    state.game.leaderboard = msg.leaderboard || [];
+                    state.game.isDrawing = false;
+                    render();
                     break;
 
                 case 'DRAWING_RESUMED':
-                    gameState.currentGame = msg.game;
-                    renderGame();
+                    state.game.isDrawing = true;
+                    render();
                     break;
 
                 case 'GAME_ENDED':
-                    localStorage.removeItem('currentGame');
                     setTimeout(() => {
-                        window.location.href = '/game';
-                    }, 2000);
+                        localStorage.removeItem('gameId');
+                        window.location.href = '/game.html';
+                    }, 1000);
+                    break;
+
+                case 'NUMBER_MARKED':
+                    const p = state.game.players[msg.playerId];
+                    if (p) {
+                        p.tickets.forEach(t => {
+                            if (!t.markedNumbers.includes(msg.number)) {
+                                t.markedNumbers.push(msg.number);
+                            }
+                        });
+                    }
+                    renderTickets();
                     break;
             }
         }
 
-        // Render game UI
-        function renderGame() {
-            const game = gameState.currentGame;
-            if (!game) return;
+        function render() {
+            const g = state.game;
+            if (!g) return;
 
-            // Update header
-            document.getElementById('gameCode').textContent = game.joinCode;
-            document.getElementById('playerCount').textContent = `${Object.keys(game.players || {}).length}/5`;
-            document.getElementById('gameStatus').textContent = game.status;
-            document.getElementById('poolAmount').textContent = game.prizePool || 0;
+            document.getElementById('gamesModal').classList.remove('show');
 
-            // Update buttons visibility
-            gameState.isHost = game.hostId === gameState.userId;
-            document.getElementById('startBtn').style.display = gameState.isHost && game.status === 'WAITING' ? 'block' : 'none';
-            document.getElementById('endBtn').style.display = gameState.isHost && game.status === 'IN_PROGRESS' ? 'block' : 'none';
-            document.getElementById('resumeBtn').style.display = gameState.isHost && game.status === 'IN_PROGRESS' && !game.isDrawing ? 'block' : 'none';
+            // Header
+            document.getElementById('code').textContent = g.joinCode;
+            document.getElementById('players').textContent = `${Object.keys(g.players || {}).length}/5`;
+            document.getElementById('status-txt').textContent = `Status: ${g.status}`;
 
-            // Hide game list modal
-            document.getElementById('gameListModal').classList.remove('active');
+            // Buttons
+            const isHost = g.hostId === state.userId;
+            document.getElementById('startBtn').style.display = isHost && g.status === 'WAITING' ? 'block' : 'none';
+            document.getElementById('endBtn').style.display = isHost && g.status === 'IN_PROGRESS' ? 'block' : 'none';
+            document.getElementById('resumeBtn').style.display = isHost && g.status === 'IN_PROGRESS' && !g.isDrawing ? 'block' : 'none';
 
-            // Render board and tickets
+            // Pool
+            document.getElementById('poolAmt').textContent = g.prizePool || 0;
+
             renderBoard();
             renderTickets();
             renderLeaderboard();
         }
 
         function renderBoard() {
-            const game = gameState.currentGame;
-            const boardHTML = Array.from({ length: 90 }, (_, i) => {
+            const g = state.game;
+            const html = Array.from({ length: 90 }, (_, i) => {
                 const num = i + 1;
-                const isDrawn = game.drawnNumbers.includes(num);
-                return `
-                    <div class="board-dot ${isDrawn ? 'drawn' : ''}">
-                        ${num}
-                    </div>
-                `;
+                const drawn = g.drawnNumbers.includes(num);
+                return `<div class="dot ${drawn ? 'drawn' : ''}">${num}</div>`;
             }).join('');
-
-            document.getElementById('boardGrid').innerHTML = boardHTML;
+            document.getElementById('boardGrid').innerHTML = html;
         }
 
         function renderDrawnList() {
-            const game = gameState.currentGame;
-            const recent = game.drawnNumbers.slice(-10).reverse();
-            const html = recent.map(n => `<span class="drawn-number">${n}</span>`).join('');
-            document.getElementById('drawnList').innerHTML = html;
+            const g = state.game;
+            const recent = g.drawnNumbers.slice(-10).reverse();
+            const html = recent.map(n => `<span class="drawn-num">${n}</span>`).join('');
+            document.getElementById('drawnList').innerHTML = html || '<span style="color:#ccc;font-size:10px">None yet</span>';
         }
 
         function renderTickets() {
-            const game = gameState.currentGame;
-            const myTickets = game.players[gameState.userId]?.tickets || [];
+            const g = state.game;
+            const myTickets = g.players[state.userId]?.tickets || [];
 
-            const html = myTickets.map((ticket, idx) => {
-                const markedSet = new Set(ticket.markedNumbers || []);
-                const grid = ticket.grid || [];
+            const html = myTickets.map((t, idx) => {
+                const marked = new Set(t.markedNumbers);
+                const cells = t.grid.flat().map(n => {
+                    if (n === 0) return '<div class="cell empty"></div>';
 
-                const cellsHTML = grid.flat().map((num, cellIdx) => {
-                    if (num === 0) {
-                        return '<div class="ticket-cell empty"></div>';
-                    }
-                    const isMarked = markedSet.has(num);
-                    const canMark = game.status === 'WAITING' || (game.status === 'IN_PROGRESS' && game.drawnNumbers.includes(num));
-                    const disabled = game.status === 'IN_PROGRESS' && !game.drawnNumbers.includes(num);
+                    const isMarked = marked.has(n);
+                    const isDrawn = g.drawnNumbers.includes(n);
+                    const canMark = g.status === 'WAITING' || (g.status === 'IN_PROGRESS' && isDrawn);
 
                     return `
-                        <div class="ticket-cell ${isMarked ? 'marked' : ''} ${disabled ? 'disabled' : ''}"
-                            onclick="${canMark && !isMarked && game.status === 'IN_PROGRESS' ? `markNumber('${ticket.id}', ${num})` : ''}">
-                            ${num}
+                        <div class="cell ${isMarked ? 'marked' : ''} ${!canMark && g.status === 'IN_PROGRESS' ? 'disabled' : ''}"
+                            onclick="${canMark && !isMarked && g.status === 'IN_PROGRESS' ? `mark('${t.id}', ${n})` : ''}">
+                            ${n}
                         </div>
                     `;
                 }).join('');
 
-                // Get available prizes for this ticket
-                const prizes = detectAvailablePrizes(ticket, game);
-                const prizeHTML = prizes.map(p => {
-                    const isClaimed = game.prizes[p.type] !== undefined;
+                const prizes = getPrizes(t, g);
+                const prizeHtml = prizes.map(p => {
+                    const claimed = g.prizes[p.type] !== undefined;
                     return `
-                        <button class="prize-btn ${isClaimed ? 'claimed' : ''}"
-                            ${isClaimed ? 'disabled' : `onclick="claimPrize('${ticket.id}', '${p.type}')`"}
-                            title="${p.type}">
+                        <button class="prize-btn" ${claimed ? 'disabled' : `onclick="claimPrize('${t.id}', '${p.type}')"}`} title="${p.type}">
                             ${p.icon}
                         </button>
                     `;
-                }).join('');
+                }).join('') || 'No prizes';
 
                 return `
                     <div class="ticket mine">
                         <div class="ticket-header">
-                            <span class="ticket-player">${gameState.username}</span>
-                            <span class="ticket-num">Ticket ${idx + 1}</span>
+                            <span>${state.username}</span>
+                            <span>Ticket ${idx + 1}</span>
                         </div>
-                        <div class="prize-icons">${prizeHTML || 'No prizes'}</div>
-                        <div class="ticket-grid">${cellsHTML}</div>
-                        <div class="ticket-footer">
-                            Marked: ${markedSet.size}/15
-                        </div>
+                        <div class="prize-btns">${prizeHtml}</div>
+                        <div class="ticket-grid">${cells}</div>
+                        <div class="ticket-info">Marked: ${marked.size}/15</div>
                     </div>
                 `;
             }).join('');
 
-            document.getElementById('ticketsContainer').innerHTML = html || '<div style="text-align: center; color: #999;">No tickets</div>';
+            document.getElementById('ticketsGrid').innerHTML = html || '<div class="empty-msg">No tickets</div>';
         }
 
-        function detectAvailablePrizes(ticket, game) {
-            const markedSet = new Set(ticket.markedNumbers || []);
+        function getPrizes(ticket, game) {
+            const marked = new Set(ticket.markedNumbers);
             const prizes = [];
 
-            // Jaldhi 5
-            if (markedSet.size >= 5 && !game.prizes['Jaldhi 5']) {
+            if (marked.size >= 5 && !game.prizes['Jaldhi 5']) {
                 prizes.push({ type: 'Jaldhi 5', icon: '5️⃣' });
             }
 
-            // Lines
             if (!game.prizes['Top Line']) {
-                const topLine = ticket.grid[0].filter(n => n !== 0);
-                if (topLine.every(n => markedSet.has(n))) {
-                    prizes.push({ type: 'Top Line', icon: '⬆️' });
-                }
+                const top = ticket.grid[0].filter(n => n !== 0);
+                if (top.every(n => marked.has(n))) prizes.push({ type: 'Top Line', icon: '⬆️' });
             }
 
             if (!game.prizes['Middle Line']) {
-                const midLine = ticket.grid[1].filter(n => n !== 0);
-                if (midLine.every(n => markedSet.has(n))) {
-                    prizes.push({ type: 'Middle Line', icon: '➡️' });
-                }
+                const mid = ticket.grid[1].filter(n => n !== 0);
+                if (mid.every(n => marked.has(n))) prizes.push({ type: 'Middle Line', icon: '➡️' });
             }
 
             if (!game.prizes['Bottom Line']) {
-                const botLine = ticket.grid[2].filter(n => n !== 0);
-                if (botLine.every(n => markedSet.has(n))) {
-                    prizes.push({ type: 'Bottom Line', icon: '⬇️' });
-                }
+                const bot = ticket.grid[2].filter(n => n !== 0);
+                if (bot.every(n => marked.has(n))) prizes.push({ type: 'Bottom Line', icon: '⬇️' });
             }
 
-            // Full Housie
             if (!game.prizes['Full Housie']) {
-                const allNums = ticket.grid.flat().filter(n => n !== 0);
-                if (allNums.every(n => markedSet.has(n))) {
-                    prizes.push({ type: 'Full Housie', icon: '🏆' });
-                }
+                const all = ticket.grid.flat().filter(n => n !== 0);
+                if (all.every(n => marked.has(n))) prizes.push({ type: 'Full Housie', icon: '🏆' });
             }
 
             return prizes;
         }
 
         function renderLeaderboard() {
-            const game = gameState.currentGame;
-            const leaderboard = game.leaderboard || [];
+            const g = state.game;
+            const lb = g.leaderboard || [];
 
-            if (leaderboard.length === 0) {
-                document.getElementById('leaderboard').innerHTML = '';
-                document.getElementById('noLeaderboard').style.display = 'block';
+            if (lb.length === 0) {
+                document.getElementById('leaderboardList').innerHTML = '';
+                document.getElementById('emptyBoard').style.display = 'block';
                 return;
             }
 
-            document.getElementById('noLeaderboard').style.display = 'none';
-            const html = leaderboard.map(entry => {
-                const prizesHTML = entry.prizes.map(p =>
-                    `<div class="entry-prize-item">${p.icon} ${p.type}: ₹${p.amount}</div>`
+            document.getElementById('emptyBoard').style.display = 'none';
+
+            const html = lb.map(entry => {
+                const prizeHtml = entry.prizes.map(p =>
+                    `<div class="prize-item">${p.icon} ${p.type}: ₹${p.amount}</div>`
                 ).join('');
 
                 return `
-                    <div class="leaderboard-entry">
-                        <div class="entry-player">🎯 ${entry.playerName}</div>
-                        <div class="entry-prizes">${prizesHTML}</div>
-                        <div class="entry-total">Total: ₹${entry.totalWinnings}</div>
+                    <div class="winner-card">
+                        <div class="winner-name">🎯 ${entry.playerName}</div>
+                        <div class="winner-prizes">${prizeHtml}</div>
+                        <div class="winner-total">Total: ₹${entry.totalWinnings}</div>
                     </div>
                 `;
             }).join('');
 
-            document.getElementById('leaderboard').innerHTML = html;
+            document.getElementById('leaderboardList').innerHTML = html;
         }
 
-        // Actions
-        function markNumber(ticketId, number) {
-            if (gameState.currentGame.status !== 'IN_PROGRESS') return;
-            if (!gameState.currentGame.drawnNumbers.includes(number)) return;
+        function mark(ticketId, num) {
+            if (state.game.status !== 'IN_PROGRESS') return;
+            if (!state.game.drawnNumbers.includes(num)) return;
 
-            ws.send(JSON.stringify({
+            state.ws.send(JSON.stringify({
                 type: 'MARK_NUMBER',
-                gameId: gameState.gameId,
-                userId: gameState.userId,
+                gameId: state.gameId,
+                userId: state.userId,
                 ticketId,
-                number
+                number: num
             }));
-
-            // Mark locally immediately
-            const ticket = gameState.currentGame.players[gameState.userId].tickets.find(t => t.id === ticketId);
-            if (ticket && !ticket.markedNumbers.includes(number)) {
-                ticket.markedNumbers.push(number);
-                renderTickets();
-            }
         }
 
         function claimPrize(ticketId, prizeType) {
-            ws.send(JSON.stringify({
-                type: 'CLAIM_WIN',
-                gameId: gameState.gameId,
-                userId: gameState.userId,
+            state.ws.send(JSON.stringify({
+                type: 'CLAIM_PRIZE',
+                gameId: state.gameId,
+                userId: state.userId,
                 ticketId,
                 prizeType
             }));
         }
 
-        document.getElementById('startBtn').addEventListener('click', () => {
-            ws.send(JSON.stringify({
-                type: 'START_GAME',
-                gameId: gameState.gameId,
-                userId: gameState.userId
-            }));
-        });
+        function startGame() {
+            state.ws.send(JSON.stringify({ type: 'START_GAME', gameId: state.gameId, userId: state.userId }));
+        }
 
-        document.getElementById('resumeBtn').addEventListener('click', () => {
-            ws.send(JSON.stringify({
-                type: 'RESUME_DRAWING',
-                gameId: gameState.gameId,
-                userId: gameState.userId
-            }));
-        });
+        function resumeGame() {
+            state.ws.send(JSON.stringify({ type: 'RESUME_DRAWING', gameId: state.gameId, userId: state.userId }));
+        }
 
-        document.getElementById('endBtn').addEventListener('click', () => {
-            if (confirm('Are you sure you want to end this game?')) {
-                ws.send(JSON.stringify({
-                    type: 'END_GAME',
-                    gameId: gameState.gameId,
-                    userId: gameState.userId
-                }));
-            }
-        });
+        function endGame() {
+            if (!confirm('End game?')) return;
+            state.ws.send(JSON.stringify({ type: 'END_GAME', gameId: state.gameId, userId: state.userId }));
+        }
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
+        function logout() {
             localStorage.removeItem('userId');
             localStorage.removeItem('username');
-            localStorage.removeItem('currentGame');
             window.location.href = '/';
-        });
+        }
 
-        // Start
         init();
     </script>
 </body>
