@@ -15,11 +15,11 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -28,54 +28,37 @@
             justify-content: space-between;
             align-items: center;
             background: white;
-            padding: 20px;
+            padding: 15px 20px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
             color: #667eea;
-            font-size: 24px;
+            font-size: 22px;
         }
 
-        .prize-pool-display {
+        .header-info {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
-            padding: 10px 20px;
-            background: #f0f1ff;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-        }
-
-        .pool-item {
-            text-align: center;
-        }
-
-        .pool-label {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .pool-amount {
-            font-size: 18px;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 13px;
         }
 
         .header-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            font-size: 12px;
         }
 
         .btn-primary {
@@ -92,253 +75,138 @@
             color: #333;
         }
 
-        .btn-secondary:hover {
-            background: #ccc;
-        }
-
         .btn-danger {
             background: #dc3545;
             color: white;
         }
 
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-        }
-
-        .main-content {
+        .main-layout {
             display: grid;
-            grid-template-columns: 280px 1fr 280px 280px;
-            gap: 20px;
+            grid-template-columns: 150px 1fr 120px;
+            gap: 12px;
         }
 
-        .player-list {
+        /* Left sidebar - Drawn numbers */
+        .drawn-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             max-height: 600px;
             overflow-y: auto;
         }
 
-        .player-item {
-            padding: 12px;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            border-left: 4px solid #667eea;
-        }
-
-        .player-name {
-            font-weight: bold;
+        .drawn-panel h3 {
             color: #667eea;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-
-        .player-details {
             font-size: 12px;
-            color: #666;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
-        .player-badges {
-            display: flex;
-            flex-wrap: wrap;
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
             gap: 4px;
         }
 
-        .prize-badge {
-            font-size: 14px;
-            padding: 2px 6px;
-            background: #fff3cd;
-            border-radius: 4px;
-            border: 1px solid #ffc107;
-        }
-
-        .prize-badge.claimed {
-            background: #d4edda;
-            border-color: #28a745;
-        }
-
-        .panel {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .panel h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .game-list {
-            display: grid;
-            gap: 10px;
-        }
-
-        .game-item {
-            padding: 15px;
-            background: #f8f9fa;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .game-item:hover {
-            border-color: #667eea;
-            background: #f0f1ff;
-        }
-
-        .game-item.active {
-            border-color: #667eea;
-            background: #e8ecff;
-        }
-
-        .game-code {
-            font-size: 20px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        .game-status {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .drawn-section {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .drawn-numbers {
-            display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            gap: 6px;
-            margin-top: 10px;
-        }
-
-        .number-badge {
+        .number-dot {
             width: 100%;
             aspect-ratio: 1;
-            border: 2px solid #ddd;
-            border-radius: 6px;
+            border-radius: 50%;
             background: white;
-            color: #333;
-            font-weight: bold;
+            border: 2px solid #ddd;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 9px;
+            font-weight: bold;
+            color: #333;
         }
 
-        .number-badge.drawn {
+        .number-dot.drawn {
             background: #667eea;
             color: white;
             border-color: #667eea;
         }
 
-        .fullscreen-number {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(102, 126, 234, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 120px;
-            font-weight: bold;
-            color: white;
-            z-index: 9999;
-            animation: fadeInOut 3s ease-in-out;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0; }
-            20%, 80% { opacity: 1; }
-        }
-
-        .prize-board {
-            background: #f0f1ff;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-        }
-
-        .prize-item {
-            padding: 10px;
+        /* Center - Tickets */
+        .tickets-panel {
             background: white;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            font-size: 12px;
-            border-left: 4px solid #ffc107;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .prize-item.claimed {
-            background: #d4edda;
-            border-left-color: #28a745;
-        }
-
-        .prize-icon {
-            font-size: 20px;
-            margin-right: 8px;
-        }
-
-        .prize-info {
-            flex: 1;
-        }
-
-        .prize-amount {
-            font-weight: bold;
-            color: #667eea;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 600px;
+            overflow-y: auto;
         }
 
         .tickets-container {
             display: grid;
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
         }
 
         .ticket {
             border: 2px solid #667eea;
             border-radius: 8px;
-            padding: 12px;
-            background: white;
+            padding: 10px;
+            background: #f8f9fa;
         }
 
         .ticket-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
             border-bottom: 1px solid #ddd;
         }
 
         .ticket-title {
             font-weight: bold;
             color: #667eea;
-            font-size: 13px;
+            font-size: 12px;
+        }
+
+        .ticket-progress {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .ticket-prizes {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .prize-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .prize-btn:hover {
+            transform: scale(1.1);
+            border-color: #667eea;
+        }
+
+        .prize-btn.claimed {
+            background: #d4edda;
+            border-color: #28a745;
         }
 
         .ticket-grid {
             display: grid;
             grid-template-columns: repeat(9, 1fr);
-            gap: 4px;
+            gap: 2px;
         }
 
         .ticket-cell {
@@ -349,17 +217,16 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 9px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            font-size: 10px;
             background: white;
         }
 
         .ticket-cell.number {
             color: #333;
+            cursor: pointer;
         }
 
-        .ticket-cell.number:hover {
+        .ticket-cell.number:hover:not(.disabled) {
             border-color: #667eea;
             background: #f0f1ff;
         }
@@ -370,30 +237,63 @@
             border-color: #667eea;
         }
 
+        .ticket-cell.number.disabled {
+            cursor: default;
+            opacity: 0.6;
+        }
+
         .ticket-cell.empty {
             background: transparent;
             border: none;
         }
 
-        .claimed-badges {
-            display: flex;
-            gap: 5px;
-            margin-top: 8px;
-            flex-wrap: wrap;
+        /* Right sidebar - Prizes */
+        .prizes-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 600px;
+            overflow-y: auto;
         }
 
-        .claimed-badge {
-            font-size: 16px;
-            display: inline-block;
-            padding: 2px 6px;
-            background: #fff3cd;
+        .prizes-panel h3 {
+            color: #667eea;
+            font-size: 12px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .prize-item {
+            padding: 8px;
+            background: #f8f9fa;
             border-radius: 4px;
-            border: 1px solid #ffc107;
+            margin-bottom: 6px;
+            font-size: 11px;
+            border-left: 3px solid #ffc107;
         }
 
-        .claimed-badge.claimed {
+        .prize-item.claimed {
             background: #d4edda;
-            border-color: #28a745;
+            border-left-color: #28a745;
+        }
+
+        .prize-icon {
+            font-size: 16px;
+            margin-right: 4px;
+        }
+
+        .prize-amount {
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .prize-winner {
+            font-size: 10px;
+            color: #28a745;
+            font-weight: 600;
         }
 
         .modal {
@@ -436,7 +336,7 @@
             margin-bottom: 5px;
             font-weight: 600;
             color: #333;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         input, select {
@@ -444,7 +344,7 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .modal-actions {
@@ -457,19 +357,9 @@
             flex: 1;
         }
 
-        @media (max-width: 1600px) {
-            .main-content {
-                grid-template-columns: 250px 1fr 250px;
-            }
-        }
-
         @media (max-width: 1200px) {
-            .main-content {
+            .main-layout {
                 grid-template-columns: 1fr;
-            }
-
-            .panel {
-                max-height: 400px;
             }
         }
     </style>
@@ -477,117 +367,54 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎮 CloseHousie Tambola</h1>
+            <div>
+                <h1>🎮 CloseHousie Tambola</h1>
+            </div>
+            <div class="header-info">
+                <div>
+                    Code: <strong id="gameCode">-</strong>
+                </div>
+                <div>
+                    Status: <strong id="gameStatus">-</strong>
+                </div>
+                <div>
+                    Players: <strong id="playerCount">0</strong>/5
+                </div>
+                <div id="username" style="color: #667eea; font-weight: 600;"></div>
+            </div>
             <div class="header-actions">
-                <span id="username" style="color: #667eea; font-weight: 600;"></span>
-                <button class="btn btn-secondary btn-small" onclick="logout()">Logout</button>
+                <button id="startBtn" class="btn btn-primary" onclick="startGame()" style="display: none;">▶️ Start</button>
+                <button id="drawBtn" class="btn btn-primary" onclick="drawNumber()" style="display: none;">🎲 Draw</button>
+                <button id="endBtn" class="btn btn-danger" onclick="endGame()" style="display: none;">⏹️ End</button>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
             </div>
         </div>
 
-        <div id="prizePoolDisplay" class="prize-pool-display" style="display: none;">
-            <div class="pool-item">
-                <div class="pool-label">Total Pool</div>
-                <div class="pool-amount" id="poolAmount">₹0</div>
-            </div>
-            <div class="pool-item">
-                <div class="pool-label">Jaldhi 5 (10%)</div>
-                <div class="pool-amount" id="poolJaldhi">₹0</div>
-            </div>
-            <div class="pool-item">
-                <div class="pool-label">Lines (10%)</div>
-                <div class="pool-amount" id="poolLines">₹0</div>
-            </div>
-            <div class="pool-item">
-                <div class="pool-label">Full House (30%)</div>
-                <div class="pool-amount" id="poolFull">₹0</div>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <!-- Left Panel: Games List -->
-            <div class="panel">
-                <h2>🎲 Games</h2>
-                <button class="btn btn-primary" style="margin-bottom: 15px; width: 100%;" onclick="openCreateGameModal()">+ Create Game</button>
-                <div id="gamesList" class="game-list">
-                    <p style="color: #999; text-align: center;">Loading games...</p>
+        <div class="main-layout">
+            <!-- Left: Drawn Numbers -->
+            <div class="drawn-panel">
+                <h3>🎲 Drawn</h3>
+                <div class="numbers-grid" id="drawnGrid">
+                    <!-- 10x9 dots will be generated here -->
                 </div>
             </div>
 
-            <!-- Center Panel: Game Board -->
-            <div class="panel">
-                <h2>📊 Game Board</h2>
+            <!-- Center: Tickets -->
+            <div class="tickets-panel">
                 <div id="gameContent" style="display: none;">
-                    <div style="background: #f0f1ff; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #667eea;">
-                        <strong>Code:</strong> <span id="gameCode" style="color: #667eea; font-size: 18px;"></span>
-                        <br>
-                        <strong>Status:</strong> <span id="gameStatus"></span> |
-                        <strong>Players:</strong> <span id="playerCount"></span>
-                    </div>
-
-                    <div class="drawn-section">
-                        <strong style="color: #667eea;">Drawn Numbers: <span id="drawnCount">0</span>/90</strong>
-                        <div class="drawn-numbers" id="drawnNumbers"></div>
-                    </div>
-
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <button id="startBtn" class="btn btn-primary" onclick="startGame()" style="display: none; flex: 1;">▶️ Start Game</button>
-                        <button id="drawBtn" class="btn btn-primary" onclick="drawNumber()" style="display: none; flex: 1;">🎲 Draw Number</button>
-                        <button id="endBtn" class="btn btn-danger" onclick="endGame()" style="display: none; flex: 1;">⏹️ End Game</button>
-                    </div>
-
-                    <h3 style="margin-top: 15px; margin-bottom: 10px; font-size: 14px; color: #667eea;">🎫 Your Tickets</h3>
                     <div class="tickets-container" id="ticketsContainer"></div>
                 </div>
                 <div id="noGameContent" style="text-align: center; color: #999;">
-                    <p>Select a game or create a new one to start playing</p>
+                    <button class="btn btn-primary" onclick="openCreateGameModal()">+ Create Game</button>
+                    <p style="margin-top: 20px; font-size: 13px;">Or join an existing game:</p>
+                    <div id="gamesList" style="margin-top: 15px;"></div>
                 </div>
             </div>
 
-            <!-- Right-Middle Panel: Players -->
-            <div class="panel">
-                <h2>👥 Players</h2>
-                <div id="playersList" class="player-list">
-                    <p style="color: #999; text-align: center; font-size: 12px;">No players joined yet</p>
-                </div>
-            </div>
-
-            <!-- Right Panel: Prizes -->
-            <div class="panel">
-                <h2>💎 Prizes</h2>
-                <div id="prizesList" class="prize-board"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Join Game Modal -->
-    <div id="joinGameModal" class="modal">
-        <div class="modal-content">
-            <h2>Join Game <span id="joinModalCode" style="color: #667eea;"></span></h2>
-
-            <div class="form-group">
-                <label>Number of Tickets</label>
-                <select id="joinTicketCount">
-                    <option value="1">1 Ticket</option>
-                    <option value="2">2 Tickets</option>
-                    <option value="3">3 Tickets</option>
-                    <option value="4">4 Tickets</option>
-                    <option value="5">5 Tickets</option>
-                    <option value="6">6 Tickets</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Your Name</label>
-                <input type="text" id="joinPlayerName" placeholder="Enter your name" value="">
-            </div>
-
-            <p style="color: #666; font-size: 12px; margin-bottom: 15px;">
-                <strong>Ticket Price:</strong> <span id="joinTicketPrice"></span> each
-            </p>
-
-            <div class="modal-actions">
-                <button class="btn btn-primary" onclick="confirmJoinGame()">Join</button>
-                <button class="btn btn-secondary" onclick="closeModal('joinGameModal')">Cancel</button>
+            <!-- Right: Prizes -->
+            <div class="prizes-panel">
+                <h3>💎 Prizes</h3>
+                <div id="prizesList"></div>
             </div>
         </div>
     </div>
@@ -595,29 +422,22 @@
     <!-- Create Game Modal -->
     <div id="createGameModal" class="modal">
         <div class="modal-content">
-            <h2>Create New Game</h2>
-
+            <h2>Create Game</h2>
             <div class="form-group">
-                <label>Number of Tickets</label>
+                <label>Tickets</label>
                 <select id="ticketCount">
-                    <option value="1">1 Ticket</option>
-                    <option value="2">2 Tickets</option>
-                    <option value="3">3 Tickets</option>
-                    <option value="4">4 Tickets</option>
-                    <option value="5">5 Tickets</option>
-                    <option value="6">6 Tickets</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
                 </select>
             </div>
-
             <div class="form-group">
-                <label>Ticket Price (₹)</label>
-                <input type="number" id="ticketPrice" placeholder="Enter price per ticket" min="1" value="100">
+                <label>Price (₹)</label>
+                <input type="number" id="ticketPrice" placeholder="100" min="1" value="100">
             </div>
-
-            <p style="color: #666; font-size: 12px; margin-bottom: 15px;">
-                Price per ticket determines the total prize pool. Share the generated code with other players to join.
-            </p>
-
             <div class="modal-actions">
                 <button class="btn btn-primary" onclick="confirmCreateGame()">Create</button>
                 <button class="btn btn-secondary" onclick="closeModal('createGameModal')">Cancel</button>
@@ -625,9 +445,32 @@
         </div>
     </div>
 
+    <!-- Join Game Modal -->
+    <div id="joinGameModal" class="modal">
+        <div class="modal-content">
+            <h2>Join <span id="joinCode"></span></h2>
+            <div class="form-group">
+                <label>Tickets</label>
+                <select id="joinTicketCount">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmJoinGame()">Join</button>
+                <button class="btn btn-secondary" onclick="closeModal('joinGameModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let ws = null;
         let currentGame = null;
+        let gameStarted = false;
         const userId = localStorage.getItem('userId');
         const username = localStorage.getItem('username');
 
@@ -635,63 +478,10 @@
             window.location.href = '/';
         }
 
-        document.getElementById('username').textContent = 'Welcome, ' + username;
+        document.getElementById('username').textContent = username;
 
         function formatCurrency(amount) {
             return '₹' + Math.floor(amount).toLocaleString('en-IN');
-        }
-
-        function updatePrizePool() {
-            if (!currentGame) return;
-
-            const pool = currentGame.prizePool || 0;
-            document.getElementById('poolAmount').textContent = formatCurrency(pool);
-            document.getElementById('poolJaldhi').textContent = formatCurrency(pool * 0.10);
-            document.getElementById('poolLines').textContent = formatCurrency(pool * 0.10);
-            document.getElementById('poolFull').textContent = formatCurrency(pool * 0.30);
-            document.getElementById('prizePoolDisplay').style.display = 'flex';
-        }
-
-        function renderPlayerList() {
-            if (!currentGame) return;
-
-            const playersList = document.getElementById('playersList');
-            const players = Object.values(currentGame.players);
-
-            if (players.length === 0) {
-                playersList.innerHTML = '<p style="color: #999; text-align: center; font-size: 12px;">No players joined yet</p>';
-                return;
-            }
-
-            const prizeIcons = {
-                'Jaldhi 5': '5️⃣',
-                'Top Line': '⬆️',
-                'Middle Line': '➡️',
-                'Bottom Line': '⬇️',
-                'Full Housie': '🏆',
-                'Second Full Housie': '🥈'
-            };
-
-            playersList.innerHTML = players.map(player => {
-                const ticketCount = player.tickets ? player.tickets.length : 0;
-                const isHost = player.id === currentGame.hostId;
-                const prizeBadges = player.claimedPrizes
-                    .map(p => `<span class="prize-badge claimed" title="${p.type}">${prizeIcons[p.type] || '🎯'}</span>`)
-                    .join('');
-
-                return `
-                    <div class="player-item">
-                        <div class="player-name">
-                            ${isHost ? '👑' : '👤'} ${player.name}
-                            ${isHost ? '<span style="font-size: 10px; color: #999;">(Host)</span>' : ''}
-                        </div>
-                        <div class="player-details">
-                            🎫 ${ticketCount} ticket${ticketCount !== 1 ? 's' : ''}
-                        </div>
-                        ${prizeBadges ? `<div class="player-badges">${prizeBadges}</div>` : '<div style="font-size: 11px; color: #999;">No prizes claimed</div>'}
-                    </div>
-                `;
-            }).join('');
         }
 
         function loadGames() {
@@ -700,117 +490,143 @@
                 .then(games => {
                     const list = document.getElementById('gamesList');
                     if (games.length === 0) {
-                        list.innerHTML = '<p style="color: #999; text-align: center;">No active games. Create one!</p>';
+                        list.innerHTML = '<p style="font-size: 12px; color: #999;">No active games</p>';
                         return;
                     }
 
                     list.innerHTML = games.map(game => {
-                        const isPlayerInGame = game.players[userId] ? true : false;
-                        const playerCount = Object.keys(game.players).length;
-
+                        const isInGame = game.players[userId] ? true : false;
                         return `
-                            <div class="game-item ${isPlayerInGame ? 'active' : ''}" ${isPlayerInGame ? `onclick="selectGame('${game.id}')"` : ''}>
-                                <div class="game-code">${game.joinCode}</div>
-                                <div style="font-size: 12px; margin-bottom: 5px;">Host: <strong>${game.hostName}</strong></div>
-                                <div class="game-status">
-                                    Players: ${playerCount}/5 • ${game.status}
-                                </div>
-                                <div style="font-size: 11px; color: #667eea; margin-top: 5px;">
-                                    Ticket: ${formatCurrency(game.ticketPrice)}
-                                </div>
-                                ${isPlayerInGame
-                                    ? '<div style="font-size: 11px; color: #28a745; margin-top: 6px;">✓ You joined</div>'
-                                    : `<button class="btn btn-primary btn-small" style="width: 100%; margin-top: 8px;" onclick="event.stopPropagation(); openJoinModal('${game.id}', '${game.joinCode}', ${game.ticketPrice})">Join Game</button>`
+                            <div style="padding: 8px; background: #f8f9fa; border-radius: 4px; margin-bottom: 6px; font-size: 12px;">
+                                <div><strong>${game.joinCode}</strong></div>
+                                <div style="font-size: 11px; color: #666;">Host: ${game.hostName}</div>
+                                <div style="font-size: 11px; color: #666; margin-bottom: 6px;">Players: ${Object.keys(game.players).length}/5 • ${game.status}</div>
+                                ${isInGame
+                                    ? `<button class="btn btn-primary" onclick="selectGame('${game.id}')" style="width: 100%;">View Game</button>`
+                                    : `<button class="btn btn-primary" onclick="openJoinModal('${game.id}', '${game.joinCode}')" style="width: 100%;">Join</button>`
                                 }
                             </div>
                         `;
                     }).join('');
-                })
-                .catch(err => {
-                    console.error('Error loading games:', err);
                 });
         }
 
         function selectGame(gameId) {
             fetch(`/api/games/${gameId}`)
-                .then(r => {
-                    if (!r.ok) {
-                        alert('Failed to load game. Please try again.');
-                        return null;
-                    }
-                    return r.json();
-                })
+                .then(r => r.json())
                 .then(game => {
-                    if (!game) return;
-
-                    // Check if current user is in the game
                     if (!game.players[userId]) {
-                        alert('You are not in this game. Please join first.');
+                        alert('You are not in this game');
                         return;
                     }
-
                     currentGame = game;
-                    renderGameBoard();
-                    renderPlayerList();
+                    gameStarted = game.status === 'IN_PROGRESS';
+                    renderGame();
                     connectWebSocket();
-                    updatePrizePool();
                 })
-                .catch(err => {
-                    console.error('Error loading game:', err);
-                    alert('Error loading game: ' + err.message);
-                });
+                .catch(err => alert('Error: ' + err.message));
         }
 
-        function displayNumberFullscreen(number) {
-            const overlay = document.createElement('div');
-            overlay.className = 'fullscreen-number';
-            overlay.textContent = number;
-            document.body.appendChild(overlay);
-
-            setTimeout(() => {
-                overlay.remove();
-            }, 3000);
-        }
-
-        function renderGameBoard() {
+        function renderGame() {
             if (!currentGame) return;
 
-            const gameContent = document.getElementById('gameContent');
-            const noGameContent = document.getElementById('noGameContent');
-
-            gameContent.style.display = 'block';
-            noGameContent.style.display = 'none';
-
+            document.getElementById('gameContent').style.display = 'block';
+            document.getElementById('noGameContent').style.display = 'none';
             document.getElementById('gameCode').textContent = currentGame.joinCode;
             document.getElementById('gameStatus').textContent = currentGame.status;
             document.getElementById('playerCount').textContent = Object.keys(currentGame.players).length;
-            document.getElementById('drawnCount').textContent = currentGame.drawnNumbers.length;
 
-            // Update player list
-            renderPlayerList();
-
-            // Render drawn numbers
-            let drawnHtml = '';
+            // Render drawn numbers (10x9 = 90 dots)
+            let dotsHtml = '';
             for (let i = 1; i <= 90; i++) {
                 const isDrawn = currentGame.drawnNumbers.includes(i);
-                drawnHtml += `<div class="number-badge ${isDrawn ? 'drawn' : ''}">${i}</div>`;
+                dotsHtml += `<div class="number-dot ${isDrawn ? 'drawn' : ''}" title="${i}">${i}</div>`;
             }
-            document.getElementById('drawnNumbers').innerHTML = drawnHtml;
+            document.getElementById('drawnGrid').innerHTML = dotsHtml;
+
+            // Render tickets
+            const playerTickets = currentGame.players[userId]?.tickets || [];
+            const ticketsHtml = playerTickets.map((ticket, idx) => {
+                const grid = ticket.grid;
+                const markedNumbers = ticket.markedNumbers;
+
+                let cellsHtml = '';
+                for (let row = 0; row < 3; row++) {
+                    for (let col = 0; col < 9; col++) {
+                        const num = grid[row][col];
+                        if (num === 0) {
+                            cellsHtml += '<div class="ticket-cell empty"></div>';
+                        } else {
+                            const isMarked = markedNumbers.includes(num);
+                            const isDisabled = gameStarted;
+                            cellsHtml += `
+                                <div class="ticket-cell number ${isMarked ? 'marked' : ''} ${isDisabled ? 'disabled' : ''}"
+                                     onclick="${!isDisabled ? `markNumber('${ticket.id}', ${num})` : ''}"
+                                     title="${num}">
+                                    ${num}
+                                </div>
+                            `;
+                        }
+                    }
+                }
+
+                const prizeBadges = ticket.claimedPrizes
+                    .map(p => `<button class="prize-btn claimed" title="${p.type}">${p.icon}</button>`)
+                    .join('');
+
+                const prizeIcons = {
+                    'Jaldhi 5': '5️⃣',
+                    'Top Line': '⬆️',
+                    'Middle Line': '➡️',
+                    'Bottom Line': '⬇️',
+                    'Full Housie': '🏆',
+                    'Second Full Housie': '🥈'
+                };
+
+                const availablePrizes = [
+                    { type: 'Jaldhi 5', icon: '5️⃣' },
+                    { type: 'Top Line', icon: '⬆️' },
+                    { type: 'Middle Line', icon: '➡️' },
+                    { type: 'Bottom Line', icon: '⬇️' },
+                    { type: 'Full Housie', icon: '🏆' },
+                    { type: 'Second Full Housie', icon: '🥈' }
+                ];
+
+                const claimedTypes = new Set(ticket.claimedPrizes.map(p => p.type));
+                const unclaimedPrizes = availablePrizes
+                    .filter(p => !claimedTypes.has(p.type))
+                    .map(p => `<button class="prize-btn" onclick="claimPrize('${ticket.id}', '${p.type}')" title="Claim ${p.type}">${p.icon}</button>`)
+                    .join('');
+
+                return `
+                    <div class="ticket">
+                        <div class="ticket-header">
+                            <span class="ticket-title">Ticket ${idx + 1}</span>
+                            <span class="ticket-progress">${markedNumbers.length}/15</span>
+                        </div>
+                        <div class="ticket-prizes">
+                            ${prizeBadges}${unclaimedPrizes}
+                        </div>
+                        <div class="ticket-grid">${cellsHtml}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('ticketsContainer').innerHTML = ticketsHtml;
 
             // Render prizes
-            const prizesList = document.getElementById('prizesList');
-            const prizeDescriptions = {
-                'Jaldhi 5': { icon: '5️⃣', desc: 'First 5 Numbers' },
+            const prizeDescs = {
+                'Jaldhi 5': { icon: '5️⃣', desc: 'First 5' },
                 'Top Line': { icon: '⬆️', desc: 'Top Row' },
-                'Middle Line': { icon: '➡️', desc: 'Middle Row' },
-                'Bottom Line': { icon: '⬇️', desc: 'Bottom Row' },
-                'Full Housie': { icon: '🏆', desc: '1st Full House' },
-                'Second Full Housie': { icon: '🥈', desc: '2nd Full House' }
+                'Middle Line': { icon: '➡️', desc: 'Mid Row' },
+                'Bottom Line': { icon: '⬇️', desc: 'Bot Row' },
+                'Full Housie': { icon: '🏆', desc: '1st Full' },
+                'Second Full Housie': { icon: '🥈', desc: '2nd Full' }
             };
 
             let prizeHtml = '';
             Object.entries(currentGame.prizes).forEach(([prize, winner]) => {
-                const desc = prizeDescriptions[prize];
+                const desc = prizeDescs[prize];
                 const amount = currentGame.prizePool ? (
                     prize === 'Full Housie' ? Math.floor(currentGame.prizePool * 0.30) :
                     prize === 'Second Full Housie' ? Math.floor(currentGame.prizePool * 0.20) :
@@ -821,63 +637,14 @@
                 prizeHtml += `
                     <div class="prize-item ${winner ? 'claimed' : ''}">
                         <span class="prize-icon">${desc.icon}</span>
-                        <div class="prize-info">
-                            <strong>${prize}</strong><br>
-                            <small>${desc.desc}</small>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="prize-amount">${formatCurrency(amount)}</div>
-                            ${winner ? `<small style="color: #28a745;"><strong>✓ ${winner.playerName}</strong></small>` : '<small style="color: #999;">Unclaimed</small>'}
-                        </div>
+                        <strong>${desc.desc}</strong>
+                        <div class="prize-amount">${formatCurrency(amount)}</div>
+                        ${winner ? `<div class="prize-winner">✓ ${winner.playerName}</div>` : ''}
                     </div>
                 `;
             });
 
-            prizesList.innerHTML = prizeHtml;
-
-            // Render player's tickets
-            const playerTickets = currentGame.players[userId]?.tickets || [];
-            const ticketsHtml = playerTickets.map((ticket, idx) => {
-                const grid = ticket.grid;
-                const markedNumbers = ticket.markedNumbers;
-                const ticketNumbers = grid.flat().filter(n => n !== 0);
-
-                let cellsHtml = '';
-                for (let row = 0; row < 3; row++) {
-                    for (let col = 0; col < 9; col++) {
-                        const num = grid[row][col];
-                        if (num === 0) {
-                            cellsHtml += '<div class="ticket-cell empty"></div>';
-                        } else {
-                            const isMarked = markedNumbers.includes(num);
-                            cellsHtml += `
-                                <div class="ticket-cell number ${isMarked ? 'marked' : ''}"
-                                     onclick="markNumber('${ticket.id}', ${num})"
-                                     title="Click to mark/unmark">
-                                    ${num}
-                                </div>
-                            `;
-                        }
-                    }
-                }
-
-                const claimedBadges = ticket.claimedPrizes.map(p =>
-                    `<div class="claimed-badge claimed" title="${p.type}">${p.icon}</div>`
-                ).join('');
-
-                return `
-                    <div class="ticket">
-                        <div class="ticket-header">
-                            <span class="ticket-title">Ticket ${idx + 1}</span>
-                            <span style="font-size: 12px; color: #999;">${markedNumbers.length}/${ticketNumbers.length}</span>
-                        </div>
-                        <div class="ticket-grid">${cellsHtml}</div>
-                        ${claimedBadges ? `<div class="claimed-badges">${claimedBadges}</div>` : ''}
-                    </div>
-                `;
-            }).join('');
-
-            document.getElementById('ticketsContainer').innerHTML = ticketsHtml;
+            document.getElementById('prizesList').innerHTML = prizeHtml;
 
             // Show/hide buttons
             const isHost = currentGame.hostId === userId;
@@ -891,7 +658,6 @@
 
         function connectWebSocket() {
             if (ws) ws.close();
-
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             ws = new WebSocket(`${protocol}//${window.location.host}`);
 
@@ -909,59 +675,48 @@
                 switch (message.type) {
                     case 'GAME_STATE':
                         currentGame = message.game;
-                        renderGameBoard();
-                        updatePrizePool();
+                        gameStarted = message.game.status === 'IN_PROGRESS';
+                        renderGame();
                         break;
 
                     case 'NUMBER_DRAWN':
                         if (currentGame) {
                             currentGame.drawnNumbers = message.sequence.map(s => s.number);
-                            renderGameBoard();
-                            displayNumberFullscreen(message.number);
-                        }
-                        break;
-
-                    case 'PLAYER_JOINED':
-                        if (currentGame) {
-                            currentGame.players[message.player.id] = message.player;
-                            updatePrizePool();
-                            renderPlayerList();
-                            alert(`✅ ${message.player.name} joined with ${message.player.tickets.length} ticket(s)!`);
-                        }
-                        break;
-
-                    case 'PRIZE_CLAIMED':
-                        if (currentGame) {
-                            currentGame.prizes = message.prizes;
-                            const player = currentGame.players[message.playerId];
-                            if (player) {
-                                player.claimedPrizes.push({
-                                    type: message.prizeType,
-                                    amount: message.amount,
-                                    icon: message.icon
-                                });
-                            }
-                            renderGameBoard();
-                            renderPlayerList();
-                            alert(`🎉 ${message.playerName} won ${message.prizeType}!\n💰 Amount: ${formatCurrency(message.amount)}`);
+                            renderGame();
                         }
                         break;
 
                     case 'GAME_STARTED':
                         currentGame = message.game;
-                        renderGameBoard();
+                        gameStarted = true;
+                        renderGame();
+                        break;
+
+                    case 'PRIZE_CLAIMED':
+                        if (currentGame) {
+                            currentGame.prizes = message.prizes;
+                            if (currentGame.players[message.playerId]) {
+                                currentGame.players[message.playerId].claimedPrizes.push({
+                                    type: message.prizeType,
+                                    amount: message.amount,
+                                    icon: message.icon
+                                });
+                            }
+                            renderGame();
+                        }
                         break;
 
                     case 'GAME_ENDED':
-                        alert('Game ended!');
-                        loadGames();
+                        alert('Game ended. Clearing cache...');
+                        localStorage.clear();
+                        setTimeout(() => window.location.href = '/', 500);
                         break;
                 }
             };
         }
 
         function markNumber(ticketId, num) {
-            if (!ws || currentGame.status !== 'IN_PROGRESS') return;
+            if (gameStarted || !ws) return;
 
             ws.send(JSON.stringify({
                 type: 'MARK_NUMBER',
@@ -969,6 +724,18 @@
                 userId: userId,
                 ticketId: ticketId,
                 number: num
+            }));
+        }
+
+        function claimPrize(ticketId, prizeType) {
+            if (!ws) return;
+
+            ws.send(JSON.stringify({
+                type: 'CLAIM_WIN',
+                gameId: currentGame.id,
+                userId: userId,
+                ticketId: ticketId,
+                prizeType: prizeType
             }));
         }
 
@@ -993,7 +760,7 @@
         }
 
         function endGame() {
-            if (confirm('Are you sure you want to end the game?')) {
+            if (confirm('End game? This will delete the game and clear cache.')) {
                 if (!ws) return;
 
                 ws.send(JSON.stringify({
@@ -1008,57 +775,14 @@
             document.getElementById('createGameModal').classList.add('active');
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        function openJoinModal(gameId, gameCode, ticketPrice) {
-            document.getElementById('joinModalCode').textContent = gameCode;
-            document.getElementById('joinTicketPrice').textContent = formatCurrency(ticketPrice);
-            document.getElementById('joinPlayerName').value = username;
+        function openJoinModal(gameId, code) {
+            document.getElementById('joinCode').textContent = code;
             document.getElementById('joinGameModal').dataset.gameId = gameId;
             document.getElementById('joinGameModal').classList.add('active');
         }
 
-        async function confirmJoinGame() {
-            const gameId = document.getElementById('joinGameModal').dataset.gameId;
-            const ticketCount = parseInt(document.getElementById('joinTicketCount').value);
-            const playerName = document.getElementById('joinPlayerName').value.trim();
-
-            if (!playerName) {
-                alert('Please enter your name');
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/games/join', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        gameId,
-                        userId,
-                        username: playerName,
-                        ticketCount
-                    })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    alert('❌ ' + (data.error || 'Failed to join game'));
-                    return;
-                }
-
-                closeModal('joinGameModal');
-                alert(`✅ Joined game!\nTickets: ${ticketCount}`);
-
-                // Reload games and select this game
-                loadGames();
-                setTimeout(() => selectGame(gameId), 500);
-            } catch (err) {
-                console.error('Join error:', err);
-                alert('Error joining game: ' + err.message);
-            }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
         }
 
         async function confirmCreateGame() {
@@ -1066,7 +790,7 @@
             const ticketPrice = parseInt(document.getElementById('ticketPrice').value);
 
             if (!ticketPrice || ticketPrice < 1) {
-                alert('Please enter a valid ticket price');
+                alert('Enter ticket price');
                 return;
             }
 
@@ -1078,11 +802,31 @@
 
             const data = await response.json();
             closeModal('createGameModal');
-            loadGames();
 
             if (data.success) {
                 selectGame(data.game.id);
-                alert(`✅ Game created!\nCode: ${data.game.joinCode}\nTicket Price: ${formatCurrency(ticketPrice)}`);
+            } else {
+                alert('Error: ' + data.error);
+            }
+        }
+
+        async function confirmJoinGame() {
+            const gameId = document.getElementById('joinGameModal').dataset.gameId;
+            const ticketCount = parseInt(document.getElementById('joinTicketCount').value);
+
+            const response = await fetch('/api/games/join', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gameId, userId, username, ticketCount })
+            });
+
+            const data = await response.json();
+            closeModal('joinGameModal');
+
+            if (data.success) {
+                selectGame(gameId);
+            } else {
+                alert('Error: ' + data.error);
             }
         }
 

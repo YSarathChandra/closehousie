@@ -538,15 +538,25 @@ wss.on('connection', (ws) => {
             return;
           }
 
-          game.status = 'COMPLETED';
-          game.endedAt = new Date().toISOString();
-          games[gameIndex] = game;
+          // Delete the game from the list
+          games.splice(gameIndex, 1);
           writeJSON(GAMES_FILE, games);
 
+          // Broadcast end game to all players
           broadcastToGame(gameId, {
             type: 'GAME_ENDED',
-            game: game
+            message: 'Game has been ended by host. Cache will be cleared.'
           });
+
+          // Close all WebSocket connections for this game
+          setTimeout(() => {
+            wss.clients.forEach(client => {
+              if (client.gameId === gameId && client.readyState === WebSocket.OPEN) {
+                client.close(1000, 'Game ended');
+              }
+            });
+          }, 500);
+
           break;
       }
     } catch (e) {
