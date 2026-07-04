@@ -266,16 +266,22 @@
             background: #667eea;
             color: white;
             border-color: #667eea;
+            font-weight: 700;
         }
 
-        .cell.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .cell:hover:not(.empty):not(.marked):not(.disabled) {
+        .cell.drawn {
             background: #e8eef9;
             border-color: #667eea;
+        }
+
+        .cell.drawn.marked {
+            background: #667eea;
+            color: white;
+        }
+
+        .cell:hover:not(.empty) {
+            opacity: 0.8;
+            transform: scale(1.05);
         }
 
         .ticket-info {
@@ -815,14 +821,14 @@
 
                     const isMarked = marked.has(n);
                     const isDrawn = g.drawnNumbers.includes(n);
-                    const canMarkNumber = g.status === 'IN_PROGRESS' && isDrawn && !isMarked;
 
                     let classes = 'cell';
                     if (isMarked) classes += ' marked';
-                    if (!isDrawn && g.status === 'IN_PROGRESS') classes += ' disabled';
+                    // Add visual indicator for drawn numbers (optional - for visual feedback)
+                    if (isDrawn) classes += ' drawn';
 
                     return `
-                        <div class="${classes}" data-ticket="${t.id}" data-number="${n}">
+                        <div class="${classes}" data-ticket="${t.id}" data-number="${n}" title="${isDrawn ? 'Drawn' : 'Not drawn yet'}">
                             ${n}
                         </div>
                     `;
@@ -858,8 +864,8 @@
                 cell.addEventListener('click', function() {
                     const ticketId = this.dataset.ticket;
                     const number = parseInt(this.dataset.number);
-                    if (this.classList.contains('marked') || this.classList.contains('disabled')) return;
-                    mark(ticketId, number);
+                    // Toggle mark on/off
+                    toggleMark(ticketId, number);
                 });
             });
 
@@ -933,20 +939,26 @@
             document.getElementById('leaderboardList').innerHTML = html;
         }
 
-        function mark(ticketId, num) {
-            if (state.game.status !== 'IN_PROGRESS') return;
-            if (!state.game.drawnNumbers.includes(num)) return;
+        function toggleMark(ticketId, num) {
+            if (!state.game) return;
 
-            // Local optimistic update
+            // Local optimistic update - toggle mark
             const ticket = state.game.players[state.userId]?.tickets?.find(t => t.id === ticketId);
-            if (ticket && !ticket.markedNumbers.includes(num)) {
+            if (!ticket) return;
+
+            const idx = ticket.markedNumbers.indexOf(num);
+            if (idx >= 0) {
+                // Already marked, unmark it
+                ticket.markedNumbers.splice(idx, 1);
+            } else {
+                // Not marked, mark it
                 ticket.markedNumbers.push(num);
             }
 
             // Render immediately for user feedback
             renderTickets();
 
-            // Send to server
+            // Send to server (for tracking, validation happens on claim)
             state.ws.send(JSON.stringify({
                 type: 'MARK_NUMBER',
                 gameId: state.gameId,
