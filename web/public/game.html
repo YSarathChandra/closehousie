@@ -646,6 +646,7 @@
                 const data = await res.json();
                 state.gameId = data.game.id;
                 state.isHost = true;
+                hideCreateModal();
                 connectGame();
             } catch (e) {
                 alert('Error: ' + e.message);
@@ -685,6 +686,7 @@
                 }
 
                 state.gameId = state.selectedGameId;
+                hideJoinModal();
                 connectGame();
             } catch (e) {
                 alert('Error: ' + e.message);
