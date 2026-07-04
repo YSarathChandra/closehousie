@@ -111,12 +111,11 @@ function generateTickets(count, startIndex = 0) {
 }
 
 // Prize detection with amounts
-function detectPrizes(markedNumbers, drawnNumbers, ticket, prizePool) {
-  const drawnSet = new Set(drawnNumbers);
+function detectPrizes(markedNumbers, drawnNumbers, ticket, prizePool, claimedPrizes = []) {
   const prizes = [];
 
-  // Check Jaldhi 5 (first 5 numbers) - 10%
-  if (markedNumbers.length >= 5) {
+  // Check Jaldhi 5 (first 5 numbers marked) - 10%
+  if (markedNumbers.length >= 5 && !claimedPrizes.includes('Jaldhi 5')) {
     prizes.push({
       type: 'Jaldhi 5',
       amount: Math.floor(prizePool * 0.10),
@@ -134,11 +133,13 @@ function detectPrizes(markedNumbers, drawnNumbers, ticket, prizePool) {
       const lineName = lineIdx === 0 ? 'Top Line' : lineIdx === 1 ? 'Middle Line' : 'Bottom Line';
       const lineIcon = lineIdx === 0 ? '⬆️' : lineIdx === 1 ? '➡️' : '⬇️';
 
-      prizes.push({
-        type: lineName,
-        amount: Math.floor(prizePool * 0.10),
-        icon: lineIcon
-      });
+      if (!claimedPrizes.includes(lineName)) {
+        prizes.push({
+          type: lineName,
+          amount: Math.floor(prizePool * 0.10),
+          icon: lineIcon
+        });
+      }
     }
   }
 
@@ -148,7 +149,7 @@ function detectPrizes(markedNumbers, drawnNumbers, ticket, prizePool) {
     .filter(n => n !== 0)
     .filter(n => markedNumbers.includes(n)).length;
 
-  if (markedTotal === totalNumbers) {
+  if (markedTotal === totalNumbers && !claimedPrizes.includes('Full Housie')) {
     prizes.push({
       type: 'Full Housie',
       amount: Math.floor(prizePool * 0.30),
@@ -271,7 +272,7 @@ app.post('/api/games/create', (req, res) => {
     hostId: userId,
     hostName: username,
     ticketPrice: ticketPrice,
-    prizePool: 0,
+    prizePool: ticketPrice * ticketCount,
     players: {
       [userId]: {
         id: userId,
@@ -285,14 +286,9 @@ app.post('/api/games/create', (req, res) => {
     drawnNumbers: [],
     drawnNumberSequence: [],
     status: 'WAITING',
-    prizes: {
-      'Jaldhi 5': null,
-      'Top Line': null,
-      'Middle Line': null,
-      'Bottom Line': null,
-      'Full Housie': null,
-      'Second Full Housie': null
-    },
+    isDrawing: false,
+    prizes: {},
+    leaderboard: [],
     createdAt: new Date().toISOString(),
     startedAt: null,
     endedAt: null
@@ -482,21 +478,52 @@ wss.on('connection', (ws) => {
           const claimTicket = game.players[userId].tickets.find(t => t.id === claimTicketId);
 
           if (claimTicket) {
-            const prizes = detectPrizes(claimTicket.markedNumbers, game.drawnNumbers, claimTicket.grid, game.prizePool);
+            const prizes = detectPrizes(claimTicket.markedNumbers, game.drawnNumbers, claimTicket.grid, game.prizePool, game.players[userId].claimedPrizes.map(p => p.type));
             const prizeMatch = prizes.find(p => p.type === prizeType);
 
-            if (prizeMatch && !game.prizes[prizeType]) {
-              game.prizes[prizeType] = {
-                playerId: userId,
-                playerName: game.players[userId].name,
-                ticketId: claimTicketId,
-                amount: prizeMatch.amount,
-                claimedAt: new Date().toISOString()
-              };
+            if (prizeMatch) {
+              // Pause auto-drawing
+              game.isDrawing = false;
+
+              // Check if prize was already claimed by others
+              if (!game.prizes[prizeType]) {
+                game.prizes[prizeType] = {
+                  winners: [{ playerId: userId, playerName: game.players[userId].name, amount: prizeMatch.amount }],
+                  totalAmount: prizeMatch.amount,
+                  icon: prizeMatch.icon,
+                  claimedAt: new Date().toISOString()
+                };
+              } else {
+                // Multiple winners - split the prize
+                const existingWinners = game.prizes[prizeType].winners || [];
+                const totalWinners = existingWinners.length + 1;
+                const amountPerWinner = Math.floor(prizeMatch.amount / totalWinners);
+
+                game.prizes[prizeType].winners = [
+                  ...existingWinners.map(w => ({ ...w, amount: amountPerWinner })),
+                  { playerId: userId, playerName: game.players[userId].name, amount: amountPerWinner }
+                ];
+                game.prizes[prizeType].totalAmount = amountPerWinner * totalWinners;
+              }
+
               game.players[userId].claimedPrizes.push({
                 type: prizeType,
-                amount: prizeMatch.amount,
+                amount: game.prizes[prizeType].winners.find(w => w.playerId === userId).amount,
                 icon: prizeMatch.icon
+              });
+
+              // Build leaderboard
+              const leaderboard = [];
+              Object.entries(game.players).forEach(([pId, player]) => {
+                if (player.claimedPrizes.length > 0) {
+                  const totalWinnings = player.claimedPrizes.reduce((sum, p) => sum + p.amount, 0);
+                  leaderboard.push({
+                    playerId: pId,
+                    playerName: player.name,
+                    prizes: player.claimedPrizes,
+                    totalWinnings: totalWinnings
+                  });
+                }
               });
 
               games[gameIndex] = game;
@@ -507,9 +534,9 @@ wss.on('connection', (ws) => {
                 playerId: userId,
                 playerName: game.players[userId].name,
                 prizeType: prizeType,
-                amount: prizeMatch.amount,
-                icon: prizeMatch.icon,
-                prizes: game.prizes
+                prizes: game.prizes,
+                leaderboard: leaderboard,
+                gameStatus: 'PAUSED'
               });
             }
           }
@@ -522,6 +549,7 @@ wss.on('connection', (ws) => {
           }
 
           game.status = 'IN_PROGRESS';
+          game.isDrawing = true;
           game.startedAt = new Date().toISOString();
           games[gameIndex] = game;
           writeJSON(GAMES_FILE, games);
@@ -530,6 +558,96 @@ wss.on('connection', (ws) => {
             type: 'GAME_STARTED',
             game: game
           });
+
+          // Start auto-drawing every 3 seconds
+          const autoDrawInterval = setInterval(() => {
+            const currentGames = readJSON(GAMES_FILE, []);
+            const currentGame = currentGames.find(g => g.id === gameId);
+
+            if (!currentGame || !currentGame.isDrawing || currentGame.status !== 'IN_PROGRESS') {
+              clearInterval(autoDrawInterval);
+              return;
+            }
+
+            const availableNumbers = Array.from({ length: 90 }, (_, i) => i + 1)
+              .filter(n => !currentGame.drawnNumbers.includes(n));
+
+            if (availableNumbers.length === 0) {
+              clearInterval(autoDrawInterval);
+              return;
+            }
+
+            const drawnNumber = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
+            currentGame.drawnNumbers.push(drawnNumber);
+            currentGame.drawnNumberSequence.push({
+              number: drawnNumber,
+              time: new Date().toISOString()
+            });
+
+            const gameIndexUpdate = currentGames.findIndex(g => g.id === gameId);
+            currentGames[gameIndexUpdate] = currentGame;
+            writeJSON(GAMES_FILE, currentGames);
+
+            broadcastToGame(gameId, {
+              type: 'NUMBER_DRAWN',
+              number: drawnNumber,
+              drawnCount: currentGame.drawnNumbers.length,
+              sequence: currentGame.drawnNumberSequence.slice(-10)
+            });
+          }, 3000);
+          break;
+
+        case 'RESUME_DRAWING':
+          if (game.hostId !== userId) {
+            ws.send(JSON.stringify({ error: 'Only host can resume drawing' }));
+            return;
+          }
+
+          game.isDrawing = true;
+          games[gameIndex] = game;
+          writeJSON(GAMES_FILE, games);
+
+          broadcastToGame(gameId, {
+            type: 'DRAWING_RESUMED',
+            game: game
+          });
+
+          // Resume auto-drawing
+          const resumeDrawInterval = setInterval(() => {
+            const currentGames = readJSON(GAMES_FILE, []);
+            const currentGame = currentGames.find(g => g.id === gameId);
+
+            if (!currentGame || !currentGame.isDrawing || currentGame.status !== 'IN_PROGRESS') {
+              clearInterval(resumeDrawInterval);
+              return;
+            }
+
+            const availableNumbers = Array.from({ length: 90 }, (_, i) => i + 1)
+              .filter(n => !currentGame.drawnNumbers.includes(n));
+
+            if (availableNumbers.length === 0) {
+              clearInterval(resumeDrawInterval);
+              return;
+            }
+
+            const drawnNumber = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
+            currentGame.drawnNumbers.push(drawnNumber);
+            currentGame.drawnNumberSequence.push({
+              number: drawnNumber,
+              time: new Date().toISOString()
+            });
+
+            const gameIndexUpdate = currentGames.findIndex(g => g.id === gameId);
+            currentGames[gameIndexUpdate] = currentGame;
+            writeJSON(GAMES_FILE, currentGames);
+
+            broadcastToGame(gameId, {
+              type: 'NUMBER_DRAWN',
+              number: drawnNumber,
+              drawnCount: currentGame.drawnNumbers.length,
+              sequence: currentGame.drawnNumberSequence.slice(-10)
+            });
+          }, 3000);
           break;
 
         case 'END_GAME':

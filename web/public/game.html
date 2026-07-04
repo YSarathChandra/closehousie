@@ -15,11 +15,11 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 15px;
+            padding: 12px;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1500px;
             margin: 0 auto;
         }
 
@@ -28,22 +28,23 @@
             justify-content: space-between;
             align-items: center;
             background: white;
-            padding: 15px 20px;
+            padding: 12px 16px;
             border-radius: 8px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .header h1 {
+        .header-left h1 {
             color: #667eea;
-            font-size: 22px;
+            font-size: 20px;
+            margin-bottom: 4px;
         }
 
         .header-info {
             display: flex;
-            gap: 15px;
-            align-items: center;
-            font-size: 13px;
+            gap: 20px;
+            font-size: 12px;
+            color: #666;
         }
 
         .header-actions {
@@ -52,13 +53,13 @@
         }
 
         .btn {
-            padding: 8px 16px;
+            padding: 8px 14px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
             font-size: 12px;
+            transition: all 0.3s ease;
         }
 
         .btn-primary {
@@ -66,8 +67,13 @@
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background: #764ba2;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .btn-secondary {
@@ -75,81 +81,131 @@
             color: #333;
         }
 
+        .btn-secondary:hover {
+            background: #ccc;
+        }
+
         .btn-danger {
             background: #dc3545;
             color: white;
         }
 
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Main layout */
         .main-layout {
             display: grid;
-            grid-template-columns: 150px 1fr 120px;
+            grid-template-columns: 180px 1fr 200px;
             gap: 12px;
         }
 
-        /* Left sidebar - Drawn numbers */
-        .drawn-panel {
+        /* Left panel - Number board */
+        .board-panel {
             background: white;
             border-radius: 8px;
             padding: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-height: 600px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-height: calc(100vh - 120px);
             overflow-y: auto;
         }
 
-        .drawn-panel h3 {
+        .board-panel h3 {
             color: #667eea;
-            font-size: 12px;
-            margin-bottom: 10px;
-            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-align: center;
         }
 
-        .numbers-grid {
+        .board-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 4px;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 2px;
+            margin-bottom: 12px;
         }
 
-        .number-dot {
+        .board-dot {
             width: 100%;
             aspect-ratio: 1;
-            border-radius: 50%;
-            background: white;
-            border: 2px solid #ddd;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 9px;
-            font-weight: bold;
-            color: #333;
+            color: #999;
+            font-weight: 600;
         }
 
-        .number-dot.drawn {
+        .board-dot.drawn {
             background: #667eea;
             color: white;
             border-color: #667eea;
         }
 
-        /* Center - Tickets */
+        .drawn-list {
+            border-top: 1px solid #eee;
+            padding-top: 8px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .drawn-list h4 {
+            font-size: 12px;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .drawn-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .drawn-number {
+            background: #667eea;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Center panel - Tickets */
         .tickets-panel {
             background: white;
             border-radius: 8px;
             padding: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-height: 600px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-height: calc(100vh - 120px);
             overflow-y: auto;
         }
 
-        .tickets-container {
+        .tickets-panel h3 {
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .tickets-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 12px;
         }
 
         .ticket {
-            border: 2px solid #667eea;
+            background: #f9f9f9;
+            border: 2px solid #ddd;
             border-radius: 8px;
             padding: 10px;
-            background: #f8f9fa;
+            position: relative;
+        }
+
+        .ticket.mine {
+            border-color: #667eea;
+            background: #f0f4ff;
         }
 
         .ticket-header {
@@ -157,145 +213,169 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
-            padding-bottom: 6px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #ddd;
         }
 
-        .ticket-title {
-            font-weight: bold;
-            color: #667eea;
-            font-size: 12px;
+        .ticket-player {
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
         }
 
-        .ticket-progress {
-            font-size: 11px;
+        .ticket-num {
+            font-size: 10px;
             color: #999;
         }
 
-        .ticket-prizes {
+        .prize-icons {
             display: flex;
             gap: 4px;
-            margin-bottom: 8px;
             flex-wrap: wrap;
+            margin-bottom: 8px;
         }
 
         .prize-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
+            font-size: 16px;
+            padding: 4px 6px;
             background: white;
-            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         .prize-btn:hover {
+            background: #f0f0f0;
             transform: scale(1.1);
-            border-color: #667eea;
         }
 
         .prize-btn.claimed {
             background: #d4edda;
             border-color: #28a745;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .ticket-grid {
             display: grid;
             grid-template-columns: repeat(9, 1fr);
             gap: 2px;
+            margin-bottom: 8px;
         }
 
         .ticket-cell {
             aspect-ratio: 1;
+            background: white;
             border: 1px solid #ddd;
             border-radius: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 10px;
-            background: white;
-        }
-
-        .ticket-cell.number {
+            font-size: 11px;
+            font-weight: 600;
             color: #333;
             cursor: pointer;
+            transition: all 0.2s;
+            min-height: 28px;
         }
 
-        .ticket-cell.number:hover:not(.disabled) {
-            border-color: #667eea;
-            background: #f0f1ff;
+        .ticket-cell.empty {
+            background: #f5f5f5;
+            cursor: default;
+            border-style: dashed;
         }
 
-        .ticket-cell.number.marked {
+        .ticket-cell.marked {
             background: #667eea;
             color: white;
             border-color: #667eea;
         }
 
-        .ticket-cell.number.disabled {
-            cursor: default;
+        .ticket-cell:hover:not(.empty):not(.marked) {
+            background: #e8eef9;
+            border-color: #667eea;
+        }
+
+        .ticket-cell.disabled {
             opacity: 0.6;
+            cursor: not-allowed;
         }
 
-        .ticket-cell.empty {
-            background: transparent;
-            border: none;
+        .ticket-footer {
+            font-size: 10px;
+            color: #999;
+            text-align: right;
         }
 
-        /* Right sidebar - Prizes */
-        .prizes-panel {
+        /* Right panel - Leaderboard */
+        .leaderboard-panel {
             background: white;
             border-radius: 8px;
             padding: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-height: 600px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-height: calc(100vh - 120px);
             overflow-y: auto;
         }
 
-        .prizes-panel h3 {
+        .leaderboard-panel h3 {
             color: #667eea;
-            font-size: 12px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .leaderboard-entry {
+            background: #f9f9f9;
+            border-left: 3px solid #667eea;
+            padding: 10px;
             margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .prize-item {
-            padding: 8px;
-            background: #f8f9fa;
             border-radius: 4px;
-            margin-bottom: 6px;
-            font-size: 11px;
-            border-left: 3px solid #ffc107;
         }
 
-        .prize-item.claimed {
-            background: #d4edda;
-            border-left-color: #28a745;
-        }
-
-        .prize-icon {
-            font-size: 16px;
-            margin-right: 4px;
-        }
-
-        .prize-amount {
-            font-weight: bold;
-            color: #667eea;
-            display: block;
-            margin-top: 2px;
-        }
-
-        .prize-winner {
-            font-size: 10px;
-            color: #28a745;
+        .entry-player {
             font-weight: 600;
+            color: #333;
+            font-size: 12px;
+            margin-bottom: 4px;
         }
 
+        .entry-prizes {
+            font-size: 10px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .entry-prize-item {
+            margin-bottom: 2px;
+        }
+
+        .entry-total {
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #ddd;
+            font-weight: 600;
+            color: #28a745;
+            font-size: 11px;
+        }
+
+        .pool-info {
+            background: #f0f4ff;
+            border: 1px solid #667eea;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .pool-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 4px 0;
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -305,8 +385,8 @@
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
 
         .modal.active {
@@ -315,528 +395,636 @@
 
         .modal-content {
             background: white;
-            padding: 30px;
+            padding: 24px;
             border-radius: 12px;
             max-width: 400px;
-            width: 100%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .modal-content h2 {
-            margin-bottom: 20px;
+        .modal h2 {
             color: #667eea;
+            margin-bottom: 16px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
 
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 6px;
             color: #333;
-            font-size: 13px;
+            font-weight: 600;
         }
 
-        input, select {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 12px;
         }
 
-        .modal-actions {
+        .form-actions {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            justify-content: flex-end;
         }
 
-        .modal-actions button {
-            flex: 1;
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
 
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        /* Responsive */
         @media (max-width: 1200px) {
             .main-layout {
+                grid-template-columns: 150px 1fr 150px;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
                 grid-template-columns: 1fr;
+            }
+
+            .board-panel, .leaderboard-panel {
+                max-height: 300px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <div>
+            <div class="header-left">
                 <h1>🎮 CloseHousie Tambola</h1>
-            </div>
-            <div class="header-info">
-                <div>
-                    Code: <strong id="gameCode">-</strong>
+                <div class="header-info">
+                    <span>Code: <strong id="gameCode">-</strong></span>
+                    <span>Players: <strong id="playerCount">0/5</strong></span>
+                    <span>Status: <strong id="gameStatus">WAITING</strong></span>
                 </div>
-                <div>
-                    Status: <strong id="gameStatus">-</strong>
-                </div>
-                <div>
-                    Players: <strong id="playerCount">0</strong>/5
-                </div>
-                <div id="username" style="color: #667eea; font-weight: 600;"></div>
             </div>
             <div class="header-actions">
-                <button id="startBtn" class="btn btn-primary" onclick="startGame()" style="display: none;">▶️ Start</button>
-                <button id="drawBtn" class="btn btn-primary" onclick="drawNumber()" style="display: none;">🎲 Draw</button>
-                <button id="endBtn" class="btn btn-danger" onclick="endGame()" style="display: none;">⏹️ End</button>
-                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                <button id="startBtn" class="btn btn-primary" style="display: none;">▶️ Start</button>
+                <button id="resumeBtn" class="btn btn-primary" style="display: none;">⏯️ Resume</button>
+                <button id="endBtn" class="btn btn-danger" style="display: none;">⏹️ End Game</button>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
             </div>
         </div>
 
+        <!-- Main Content -->
         <div class="main-layout">
-            <!-- Left: Drawn Numbers -->
-            <div class="drawn-panel">
-                <h3>🎲 Drawn</h3>
-                <div class="numbers-grid" id="drawnGrid">
-                    <!-- 10x9 dots will be generated here -->
+            <!-- Left: Board -->
+            <div class="board-panel">
+                <h3>🎲 Board (1-90)</h3>
+                <div class="board-grid" id="boardGrid"></div>
+                <div class="drawn-list">
+                    <h4>Drawn Numbers</h4>
+                    <div class="drawn-numbers" id="drawnList"></div>
                 </div>
             </div>
 
             <!-- Center: Tickets -->
             <div class="tickets-panel">
-                <div id="gameContent" style="display: none;">
-                    <div class="tickets-container" id="ticketsContainer"></div>
-                </div>
-                <div id="noGameContent" style="text-align: center; color: #999;">
-                    <button class="btn btn-primary" onclick="openCreateGameModal()">+ Create Game</button>
-                    <p style="margin-top: 20px; font-size: 13px;">Or join an existing game:</p>
-                    <div id="gamesList" style="margin-top: 15px;"></div>
-                </div>
+                <h3>🎫 Your Tickets</h3>
+                <div class="tickets-grid" id="ticketsContainer"></div>
             </div>
 
-            <!-- Right: Prizes -->
-            <div class="prizes-panel">
-                <h3>💎 Prizes</h3>
-                <div id="prizesList"></div>
+            <!-- Right: Leaderboard -->
+            <div class="leaderboard-panel">
+                <h3>🏆 Leaderboard</h3>
+                <div class="pool-info">
+                    <div>Prize Pool</div>
+                    <div class="pool-amount">₹<span id="poolAmount">0</span></div>
+                </div>
+                <div id="leaderboard"></div>
+                <div id="noLeaderboard" style="text-align: center; color: #999; font-size: 12px;">
+                    No winners yet
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Create Game Modal -->
+    <!-- Modals -->
+    <div id="gameListModal" class="modal active">
+        <div class="modal-content">
+            <h2>🎮 Tambola Games</h2>
+            <div id="gamesList" style="max-height: 400px; overflow-y: auto; margin-bottom: 16px;"></div>
+            <div class="form-actions">
+                <button class="btn btn-primary" onclick="openCreateGameModal()">➕ Create Game</button>
+            </div>
+        </div>
+    </div>
+
     <div id="createGameModal" class="modal">
         <div class="modal-content">
             <h2>Create Game</h2>
             <div class="form-group">
-                <label>Tickets</label>
-                <select id="ticketCount">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                </select>
+                <label>Ticket Count</label>
+                <input type="number" id="createTickets" value="2" min="1" max="6">
             </div>
             <div class="form-group">
-                <label>Price (₹)</label>
-                <input type="number" id="ticketPrice" placeholder="100" min="1" value="100">
+                <label>Ticket Price (₹)</label>
+                <input type="number" id="createPrice" value="100" min="10">
             </div>
-            <div class="modal-actions">
-                <button class="btn btn-primary" onclick="confirmCreateGame()">Create</button>
-                <button class="btn btn-secondary" onclick="closeModal('createGameModal')">Cancel</button>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="closeCreateGameModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="createGame()">Create</button>
             </div>
         </div>
     </div>
 
-    <!-- Join Game Modal -->
     <div id="joinGameModal" class="modal">
         <div class="modal-content">
-            <h2>Join <span id="joinCode"></span></h2>
+            <h2>Join Game</h2>
             <div class="form-group">
-                <label>Tickets</label>
-                <select id="joinTicketCount">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                </select>
+                <label>Ticket Count</label>
+                <input type="number" id="joinTickets" value="1" min="1" max="6">
             </div>
-            <div class="modal-actions">
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="closeJoinGameModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="confirmJoinGame()">Join</button>
-                <button class="btn btn-secondary" onclick="closeModal('joinGameModal')">Cancel</button>
             </div>
         </div>
     </div>
 
     <script>
+        let gameState = {
+            gameId: null,
+            userId: null,
+            username: null,
+            isHost: false,
+            currentGame: null,
+            myTickets: [],
+            allTickets: {}
+        };
+
         let ws = null;
-        let currentGame = null;
-        let gameStarted = false;
-        const userId = localStorage.getItem('userId');
-        const username = localStorage.getItem('username');
 
-        if (!userId || !username) {
-            window.location.href = '/';
+        // Initialize
+        function init() {
+            const stored = localStorage.getItem('user');
+            if (!stored) {
+                window.location.href = '/';
+                return;
+            }
+
+            const user = JSON.parse(stored);
+            gameState.userId = user.userId;
+            gameState.username = user.username;
+
+            const gameId = new URLSearchParams(window.location.search).get('gameId');
+            if (gameId) {
+                gameState.gameId = gameId;
+                connectToGame();
+            } else {
+                loadGamesList();
+            }
         }
 
-        document.getElementById('username').textContent = username;
+        // Load games list
+        async function loadGamesList() {
+            try {
+                const res = await fetch('/api/games');
+                const games = await res.json();
 
-        function formatCurrency(amount) {
-            return '₹' + Math.floor(amount).toLocaleString('en-IN');
-        }
-
-        function loadGames() {
-            fetch('/api/games')
-                .then(r => r.json())
-                .then(games => {
-                    const list = document.getElementById('gamesList');
-                    if (games.length === 0) {
-                        list.innerHTML = '<p style="font-size: 12px; color: #999;">No active games</p>';
-                        return;
-                    }
-
-                    list.innerHTML = games.map(game => {
-                        const isInGame = game.players[userId] ? true : false;
-                        return `
-                            <div style="padding: 8px; background: #f8f9fa; border-radius: 4px; margin-bottom: 6px; font-size: 12px;">
-                                <div><strong>${game.joinCode}</strong></div>
-                                <div style="font-size: 11px; color: #666;">Host: ${game.hostName}</div>
-                                <div style="font-size: 11px; color: #666; margin-bottom: 6px;">Players: ${Object.keys(game.players).length}/5 • ${game.status}</div>
-                                ${isInGame
-                                    ? `<button class="btn btn-primary" onclick="selectGame('${game.id}')" style="width: 100%;">View Game</button>`
-                                    : `<button class="btn btn-primary" onclick="openJoinModal('${game.id}', '${game.joinCode}')" style="width: 100%;">Join</button>`
-                                }
+                let html = '';
+                if (games.length === 0) {
+                    html = '<div style="text-align: center; color: #999; padding: 20px;">No active games</div>';
+                } else {
+                    games.forEach(game => {
+                        const playerCount = Object.keys(game.players || {}).length;
+                        const isJoined = game.players && game.players[gameState.userId];
+                        html += `
+                            <div style="padding: 10px; background: #f9f9f9; margin-bottom: 8px; border-radius: 4px;">
+                                <div style="font-weight: 600; color: #333; margin-bottom: 4px;">
+                                    ${game.hostName}'s Game - ₹${game.ticketPrice}/ticket
+                                </div>
+                                <div style="font-size: 11px; color: #666; margin-bottom: 6px;">
+                                    Code: <strong>${game.joinCode}</strong> | Players: ${playerCount}/5 | Status: ${game.status}
+                                </div>
+                                <button class="btn btn-primary" style="width: 100%; font-size: 11px; padding: 6px;"
+                                    onclick="openJoinModal('${game.id}', ${game.ticketPrice})">
+                                    ${isJoined ? '👁️ View Game' : '➕ Join Game'}
+                                </button>
                             </div>
                         `;
-                    }).join('');
-                });
-        }
-
-        function selectGame(gameId) {
-            fetch(`/api/games/${gameId}`)
-                .then(r => r.json())
-                .then(game => {
-                    if (!game.players[userId]) {
-                        alert('You are not in this game');
-                        return;
-                    }
-                    currentGame = game;
-                    gameStarted = game.status === 'IN_PROGRESS';
-                    renderGame();
-                    connectWebSocket();
-                })
-                .catch(err => alert('Error: ' + err.message));
-        }
-
-        function renderGame() {
-            if (!currentGame) return;
-
-            document.getElementById('gameContent').style.display = 'block';
-            document.getElementById('noGameContent').style.display = 'none';
-            document.getElementById('gameCode').textContent = currentGame.joinCode;
-            document.getElementById('gameStatus').textContent = currentGame.status;
-            document.getElementById('playerCount').textContent = Object.keys(currentGame.players).length;
-
-            // Render drawn numbers (10x9 = 90 dots)
-            let dotsHtml = '';
-            for (let i = 1; i <= 90; i++) {
-                const isDrawn = currentGame.drawnNumbers.includes(i);
-                dotsHtml += `<div class="number-dot ${isDrawn ? 'drawn' : ''}" title="${i}">${i}</div>`;
-            }
-            document.getElementById('drawnGrid').innerHTML = dotsHtml;
-
-            // Render tickets
-            const playerTickets = currentGame.players[userId]?.tickets || [];
-            const ticketsHtml = playerTickets.map((ticket, idx) => {
-                const grid = ticket.grid;
-                const markedNumbers = ticket.markedNumbers;
-
-                let cellsHtml = '';
-                for (let row = 0; row < 3; row++) {
-                    for (let col = 0; col < 9; col++) {
-                        const num = grid[row][col];
-                        if (num === 0) {
-                            cellsHtml += '<div class="ticket-cell empty"></div>';
-                        } else {
-                            const isMarked = markedNumbers.includes(num);
-                            const isDisabled = gameStarted;
-                            cellsHtml += `
-                                <div class="ticket-cell number ${isMarked ? 'marked' : ''} ${isDisabled ? 'disabled' : ''}"
-                                     onclick="${!isDisabled ? `markNumber('${ticket.id}', ${num})` : ''}"
-                                     title="${num}">
-                                    ${num}
-                                </div>
-                            `;
-                        }
-                    }
+                    });
                 }
 
-                const prizeBadges = ticket.claimedPrizes
-                    .map(p => `<button class="prize-btn claimed" title="${p.type}">${p.icon}</button>`)
-                    .join('');
-
-                const prizeIcons = {
-                    'Jaldhi 5': '5️⃣',
-                    'Top Line': '⬆️',
-                    'Middle Line': '➡️',
-                    'Bottom Line': '⬇️',
-                    'Full Housie': '🏆',
-                    'Second Full Housie': '🥈'
-                };
-
-                const availablePrizes = [
-                    { type: 'Jaldhi 5', icon: '5️⃣' },
-                    { type: 'Top Line', icon: '⬆️' },
-                    { type: 'Middle Line', icon: '➡️' },
-                    { type: 'Bottom Line', icon: '⬇️' },
-                    { type: 'Full Housie', icon: '🏆' },
-                    { type: 'Second Full Housie', icon: '🥈' }
-                ];
-
-                const claimedTypes = new Set(ticket.claimedPrizes.map(p => p.type));
-                const unclaimedPrizes = availablePrizes
-                    .filter(p => !claimedTypes.has(p.type))
-                    .map(p => `<button class="prize-btn" onclick="claimPrize('${ticket.id}', '${p.type}')" title="Claim ${p.type}">${p.icon}</button>`)
-                    .join('');
-
-                return `
-                    <div class="ticket">
-                        <div class="ticket-header">
-                            <span class="ticket-title">Ticket ${idx + 1}</span>
-                            <span class="ticket-progress">${markedNumbers.length}/15</span>
-                        </div>
-                        <div class="ticket-prizes">
-                            ${prizeBadges}${unclaimedPrizes}
-                        </div>
-                        <div class="ticket-grid">${cellsHtml}</div>
-                    </div>
-                `;
-            }).join('');
-
-            document.getElementById('ticketsContainer').innerHTML = ticketsHtml;
-
-            // Render prizes
-            const prizeDescs = {
-                'Jaldhi 5': { icon: '5️⃣', desc: 'First 5' },
-                'Top Line': { icon: '⬆️', desc: 'Top Row' },
-                'Middle Line': { icon: '➡️', desc: 'Mid Row' },
-                'Bottom Line': { icon: '⬇️', desc: 'Bot Row' },
-                'Full Housie': { icon: '🏆', desc: '1st Full' },
-                'Second Full Housie': { icon: '🥈', desc: '2nd Full' }
-            };
-
-            let prizeHtml = '';
-            Object.entries(currentGame.prizes).forEach(([prize, winner]) => {
-                const desc = prizeDescs[prize];
-                const amount = currentGame.prizePool ? (
-                    prize === 'Full Housie' ? Math.floor(currentGame.prizePool * 0.30) :
-                    prize === 'Second Full Housie' ? Math.floor(currentGame.prizePool * 0.20) :
-                    ['Top Line', 'Middle Line', 'Bottom Line'].includes(prize) ? Math.floor(currentGame.prizePool * 0.10) :
-                    Math.floor(currentGame.prizePool * 0.10)
-                ) : 0;
-
-                prizeHtml += `
-                    <div class="prize-item ${winner ? 'claimed' : ''}">
-                        <span class="prize-icon">${desc.icon}</span>
-                        <strong>${desc.desc}</strong>
-                        <div class="prize-amount">${formatCurrency(amount)}</div>
-                        ${winner ? `<div class="prize-winner">✓ ${winner.playerName}</div>` : ''}
-                    </div>
-                `;
-            });
-
-            document.getElementById('prizesList').innerHTML = prizeHtml;
-
-            // Show/hide buttons
-            const isHost = currentGame.hostId === userId;
-            const isWaiting = currentGame.status === 'WAITING';
-            const isInProgress = currentGame.status === 'IN_PROGRESS';
-
-            document.getElementById('startBtn').style.display = (isHost && isWaiting) ? 'block' : 'none';
-            document.getElementById('drawBtn').style.display = (isHost && isInProgress) ? 'block' : 'none';
-            document.getElementById('endBtn').style.display = (isHost && isInProgress) ? 'block' : 'none';
+                document.getElementById('gamesList').innerHTML = html;
+            } catch (e) {
+                console.error('Error loading games:', e);
+            }
         }
 
-        function connectWebSocket() {
-            if (ws) ws.close();
+        // Game modals
+        function openCreateGameModal() {
+            document.getElementById('gameListModal').classList.remove('active');
+            document.getElementById('createGameModal').classList.add('active');
+        }
+
+        function closeCreateGameModal() {
+            document.getElementById('createGameModal').classList.remove('active');
+            document.getElementById('gameListModal').classList.add('active');
+        }
+
+        async function createGame() {
+            const ticketCount = parseInt(document.getElementById('createTickets').value);
+            const ticketPrice = parseInt(document.getElementById('createPrice').value);
+
+            try {
+                const res = await fetch('/api/games/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: gameState.userId,
+                        username: gameState.username,
+                        ticketCount,
+                        ticketPrice
+                    })
+                });
+
+                const result = await res.json();
+                gameState.gameId = result.game.id;
+                gameState.isHost = true;
+                connectToGame();
+            } catch (e) {
+                alert('Error creating game: ' + e.message);
+            }
+        }
+
+        let targetGameId = null;
+
+        function openJoinModal(gameId, price) {
+            targetGameId = gameId;
+            document.getElementById('joinGameModal').classList.add('active');
+        }
+
+        function closeJoinGameModal() {
+            document.getElementById('joinGameModal').classList.remove('active');
+        }
+
+        async function confirmJoinGame() {
+            const ticketCount = parseInt(document.getElementById('joinTickets').value);
+
+            try {
+                const res = await fetch('/api/games/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gameId: targetGameId,
+                        userId: gameState.userId,
+                        username: gameState.username,
+                        ticketCount
+                    })
+                });
+
+                if (!res.ok) {
+                    const error = await res.json();
+                    alert('Error: ' + error.error);
+                    return;
+                }
+
+                gameState.gameId = targetGameId;
+                closeJoinGameModal();
+                connectToGame();
+            } catch (e) {
+                alert('Error joining game: ' + e.message);
+            }
+        }
+
+        // Connect to game via WebSocket
+        function connectToGame() {
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             ws = new WebSocket(`${protocol}//${window.location.host}`);
 
             ws.onopen = () => {
+                console.log('Connected to game');
                 ws.send(JSON.stringify({
                     type: 'JOIN_GAME',
-                    gameId: currentGame.id,
-                    userId: userId
+                    gameId: gameState.gameId,
+                    userId: gameState.userId
                 }));
             };
 
             ws.onmessage = (event) => {
-                const message = JSON.parse(event.data);
+                const msg = JSON.parse(event.data);
+                handleMessage(msg);
+            };
 
-                switch (message.type) {
-                    case 'GAME_STATE':
-                        currentGame = message.game;
-                        gameStarted = message.game.status === 'IN_PROGRESS';
-                        renderGame();
-                        break;
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
 
-                    case 'NUMBER_DRAWN':
-                        if (currentGame) {
-                            currentGame.drawnNumbers = message.sequence.map(s => s.number);
-                            renderGame();
-                        }
-                        break;
-
-                    case 'GAME_STARTED':
-                        currentGame = message.game;
-                        gameStarted = true;
-                        renderGame();
-                        break;
-
-                    case 'PRIZE_CLAIMED':
-                        if (currentGame) {
-                            currentGame.prizes = message.prizes;
-                            if (currentGame.players[message.playerId]) {
-                                currentGame.players[message.playerId].claimedPrizes.push({
-                                    type: message.prizeType,
-                                    amount: message.amount,
-                                    icon: message.icon
-                                });
-                            }
-                            renderGame();
-                        }
-                        break;
-
-                    case 'GAME_ENDED':
-                        alert('Game ended. Clearing cache...');
-                        localStorage.clear();
-                        setTimeout(() => window.location.href = '/', 500);
-                        break;
-                }
+            ws.onclose = () => {
+                console.log('Disconnected from game');
             };
         }
 
-        function markNumber(ticketId, num) {
-            if (gameStarted || !ws) return;
+        // Handle WebSocket messages
+        function handleMessage(msg) {
+            switch (msg.type) {
+                case 'GAME_STATE':
+                    gameState.currentGame = msg.game;
+                    renderGame();
+                    break;
 
-            ws.send(JSON.stringify({
-                type: 'MARK_NUMBER',
-                gameId: currentGame.id,
-                userId: userId,
-                ticketId: ticketId,
-                number: num
-            }));
-        }
+                case 'PLAYER_JOINED':
+                    gameState.currentGame.players = msg.game?.players || gameState.currentGame.players;
+                    renderGame();
+                    break;
 
-        function claimPrize(ticketId, prizeType) {
-            if (!ws) return;
+                case 'GAME_STARTED':
+                    gameState.currentGame = msg.game;
+                    renderGame();
+                    break;
 
-            ws.send(JSON.stringify({
-                type: 'CLAIM_WIN',
-                gameId: currentGame.id,
-                userId: userId,
-                ticketId: ticketId,
-                prizeType: prizeType
-            }));
-        }
+                case 'NUMBER_DRAWN':
+                    gameState.currentGame.drawnNumbers = msg.drawnNumbers || gameState.currentGame.drawnNumbers;
+                    gameState.currentGame.drawnNumberSequence = msg.sequence;
+                    renderBoard();
+                    renderDrawnList();
+                    break;
 
-        function drawNumber() {
-            if (!ws) return;
+                case 'PRIZE_CLAIMED':
+                    gameState.currentGame.prizes = msg.prizes;
+                    gameState.currentGame.leaderboard = msg.leaderboard;
+                    gameState.currentGame.isDrawing = false;
+                    renderGame();
+                    break;
 
-            ws.send(JSON.stringify({
-                type: 'DRAW_NUMBER',
-                gameId: currentGame.id,
-                userId: userId
-            }));
-        }
+                case 'DRAWING_RESUMED':
+                    gameState.currentGame = msg.game;
+                    renderGame();
+                    break;
 
-        function startGame() {
-            if (!ws) return;
-
-            ws.send(JSON.stringify({
-                type: 'START_GAME',
-                gameId: currentGame.id,
-                userId: userId
-            }));
-        }
-
-        function endGame() {
-            if (confirm('End game? This will delete the game and clear cache.')) {
-                if (!ws) return;
-
-                ws.send(JSON.stringify({
-                    type: 'END_GAME',
-                    gameId: currentGame.id,
-                    userId: userId
-                }));
+                case 'GAME_ENDED':
+                    localStorage.removeItem('currentGame');
+                    setTimeout(() => {
+                        window.location.href = '/game';
+                    }, 2000);
+                    break;
             }
         }
 
-        function openCreateGameModal() {
-            document.getElementById('createGameModal').classList.add('active');
+        // Render game UI
+        function renderGame() {
+            const game = gameState.currentGame;
+            if (!game) return;
+
+            // Update header
+            document.getElementById('gameCode').textContent = game.joinCode;
+            document.getElementById('playerCount').textContent = `${Object.keys(game.players || {}).length}/5`;
+            document.getElementById('gameStatus').textContent = game.status;
+            document.getElementById('poolAmount').textContent = game.prizePool || 0;
+
+            // Update buttons visibility
+            gameState.isHost = game.hostId === gameState.userId;
+            document.getElementById('startBtn').style.display = gameState.isHost && game.status === 'WAITING' ? 'block' : 'none';
+            document.getElementById('endBtn').style.display = gameState.isHost && game.status === 'IN_PROGRESS' ? 'block' : 'none';
+            document.getElementById('resumeBtn').style.display = gameState.isHost && game.status === 'IN_PROGRESS' && !game.isDrawing ? 'block' : 'none';
+
+            // Hide game list modal
+            document.getElementById('gameListModal').classList.remove('active');
+
+            // Render board and tickets
+            renderBoard();
+            renderTickets();
+            renderLeaderboard();
         }
 
-        function openJoinModal(gameId, code) {
-            document.getElementById('joinCode').textContent = code;
-            document.getElementById('joinGameModal').dataset.gameId = gameId;
-            document.getElementById('joinGameModal').classList.add('active');
+        function renderBoard() {
+            const game = gameState.currentGame;
+            const boardHTML = Array.from({ length: 90 }, (_, i) => {
+                const num = i + 1;
+                const isDrawn = game.drawnNumbers.includes(num);
+                return `
+                    <div class="board-dot ${isDrawn ? 'drawn' : ''}">
+                        ${num}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('boardGrid').innerHTML = boardHTML;
         }
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
+        function renderDrawnList() {
+            const game = gameState.currentGame;
+            const recent = game.drawnNumbers.slice(-10).reverse();
+            const html = recent.map(n => `<span class="drawn-number">${n}</span>`).join('');
+            document.getElementById('drawnList').innerHTML = html;
         }
 
-        async function confirmCreateGame() {
-            const ticketCount = parseInt(document.getElementById('ticketCount').value);
-            const ticketPrice = parseInt(document.getElementById('ticketPrice').value);
+        function renderTickets() {
+            const game = gameState.currentGame;
+            const myTickets = game.players[gameState.userId]?.tickets || [];
 
-            if (!ticketPrice || ticketPrice < 1) {
-                alert('Enter ticket price');
+            const html = myTickets.map((ticket, idx) => {
+                const markedSet = new Set(ticket.markedNumbers || []);
+                const grid = ticket.grid || [];
+
+                const cellsHTML = grid.flat().map((num, cellIdx) => {
+                    if (num === 0) {
+                        return '<div class="ticket-cell empty"></div>';
+                    }
+                    const isMarked = markedSet.has(num);
+                    const canMark = game.status === 'WAITING' || (game.status === 'IN_PROGRESS' && game.drawnNumbers.includes(num));
+                    const disabled = game.status === 'IN_PROGRESS' && !game.drawnNumbers.includes(num);
+
+                    return `
+                        <div class="ticket-cell ${isMarked ? 'marked' : ''} ${disabled ? 'disabled' : ''}"
+                            onclick="${canMark && !isMarked && game.status === 'IN_PROGRESS' ? `markNumber('${ticket.id}', ${num})` : ''}">
+                            ${num}
+                        </div>
+                    `;
+                }).join('');
+
+                // Get available prizes for this ticket
+                const prizes = detectAvailablePrizes(ticket, game);
+                const prizeHTML = prizes.map(p => {
+                    const isClaimed = game.prizes[p.type] !== undefined;
+                    return `
+                        <button class="prize-btn ${isClaimed ? 'claimed' : ''}"
+                            ${isClaimed ? 'disabled' : `onclick="claimPrize('${ticket.id}', '${p.type}')`"}
+                            title="${p.type}">
+                            ${p.icon}
+                        </button>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="ticket mine">
+                        <div class="ticket-header">
+                            <span class="ticket-player">${gameState.username}</span>
+                            <span class="ticket-num">Ticket ${idx + 1}</span>
+                        </div>
+                        <div class="prize-icons">${prizeHTML || 'No prizes'}</div>
+                        <div class="ticket-grid">${cellsHTML}</div>
+                        <div class="ticket-footer">
+                            Marked: ${markedSet.size}/15
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('ticketsContainer').innerHTML = html || '<div style="text-align: center; color: #999;">No tickets</div>';
+        }
+
+        function detectAvailablePrizes(ticket, game) {
+            const markedSet = new Set(ticket.markedNumbers || []);
+            const prizes = [];
+
+            // Jaldhi 5
+            if (markedSet.size >= 5 && !game.prizes['Jaldhi 5']) {
+                prizes.push({ type: 'Jaldhi 5', icon: '5️⃣' });
+            }
+
+            // Lines
+            if (!game.prizes['Top Line']) {
+                const topLine = ticket.grid[0].filter(n => n !== 0);
+                if (topLine.every(n => markedSet.has(n))) {
+                    prizes.push({ type: 'Top Line', icon: '⬆️' });
+                }
+            }
+
+            if (!game.prizes['Middle Line']) {
+                const midLine = ticket.grid[1].filter(n => n !== 0);
+                if (midLine.every(n => markedSet.has(n))) {
+                    prizes.push({ type: 'Middle Line', icon: '➡️' });
+                }
+            }
+
+            if (!game.prizes['Bottom Line']) {
+                const botLine = ticket.grid[2].filter(n => n !== 0);
+                if (botLine.every(n => markedSet.has(n))) {
+                    prizes.push({ type: 'Bottom Line', icon: '⬇️' });
+                }
+            }
+
+            // Full Housie
+            if (!game.prizes['Full Housie']) {
+                const allNums = ticket.grid.flat().filter(n => n !== 0);
+                if (allNums.every(n => markedSet.has(n))) {
+                    prizes.push({ type: 'Full Housie', icon: '🏆' });
+                }
+            }
+
+            return prizes;
+        }
+
+        function renderLeaderboard() {
+            const game = gameState.currentGame;
+            const leaderboard = game.leaderboard || [];
+
+            if (leaderboard.length === 0) {
+                document.getElementById('leaderboard').innerHTML = '';
+                document.getElementById('noLeaderboard').style.display = 'block';
                 return;
             }
 
-            const response = await fetch('/api/games/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, username, ticketCount, ticketPrice })
-            });
+            document.getElementById('noLeaderboard').style.display = 'none';
+            const html = leaderboard.map(entry => {
+                const prizesHTML = entry.prizes.map(p =>
+                    `<div class="entry-prize-item">${p.icon} ${p.type}: ₹${p.amount}</div>`
+                ).join('');
 
-            const data = await response.json();
-            closeModal('createGameModal');
+                return `
+                    <div class="leaderboard-entry">
+                        <div class="entry-player">🎯 ${entry.playerName}</div>
+                        <div class="entry-prizes">${prizesHTML}</div>
+                        <div class="entry-total">Total: ₹${entry.totalWinnings}</div>
+                    </div>
+                `;
+            }).join('');
 
-            if (data.success) {
-                selectGame(data.game.id);
-            } else {
-                alert('Error: ' + data.error);
+            document.getElementById('leaderboard').innerHTML = html;
+        }
+
+        // Actions
+        function markNumber(ticketId, number) {
+            if (gameState.currentGame.status !== 'IN_PROGRESS') return;
+            if (!gameState.currentGame.drawnNumbers.includes(number)) return;
+
+            ws.send(JSON.stringify({
+                type: 'MARK_NUMBER',
+                gameId: gameState.gameId,
+                userId: gameState.userId,
+                ticketId,
+                number
+            }));
+
+            // Mark locally immediately
+            const ticket = gameState.currentGame.players[gameState.userId].tickets.find(t => t.id === ticketId);
+            if (ticket && !ticket.markedNumbers.includes(number)) {
+                ticket.markedNumbers.push(number);
+                renderTickets();
             }
         }
 
-        async function confirmJoinGame() {
-            const gameId = document.getElementById('joinGameModal').dataset.gameId;
-            const ticketCount = parseInt(document.getElementById('joinTicketCount').value);
-
-            const response = await fetch('/api/games/join', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ gameId, userId, username, ticketCount })
-            });
-
-            const data = await response.json();
-            closeModal('joinGameModal');
-
-            if (data.success) {
-                selectGame(gameId);
-            } else {
-                alert('Error: ' + data.error);
-            }
+        function claimPrize(ticketId, prizeType) {
+            ws.send(JSON.stringify({
+                type: 'CLAIM_WIN',
+                gameId: gameState.gameId,
+                userId: gameState.userId,
+                ticketId,
+                prizeType
+            }));
         }
 
-        function logout() {
-            localStorage.clear();
+        document.getElementById('startBtn').addEventListener('click', () => {
+            ws.send(JSON.stringify({
+                type: 'START_GAME',
+                gameId: gameState.gameId,
+                userId: gameState.userId
+            }));
+        });
+
+        document.getElementById('resumeBtn').addEventListener('click', () => {
+            ws.send(JSON.stringify({
+                type: 'RESUME_DRAWING',
+                gameId: gameState.gameId,
+                userId: gameState.userId
+            }));
+        });
+
+        document.getElementById('endBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to end this game?')) {
+                ws.send(JSON.stringify({
+                    type: 'END_GAME',
+                    gameId: gameState.gameId,
+                    userId: gameState.userId
+                }));
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('user');
+            localStorage.removeItem('currentGame');
             window.location.href = '/';
-        }
+        });
 
-        loadGames();
-        setInterval(loadGames, 3000);
+        // Start
+        init();
     </script>
 </body>
 </html>
