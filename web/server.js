@@ -535,6 +535,19 @@ wss.on('connection', (ws) => {
           break;
         }
 
+        case 'PAUSE_DRAWING':
+          if (game.hostId !== userId) {
+            ws.send(JSON.stringify({ error: 'Only host can pause' }));
+            return;
+          }
+
+          game.isDrawing = false;
+          games[gameIdx] = game;
+          writeJSON(GAMES_FILE, games);
+
+          broadcastToGame(gameId, { type: 'DRAWING_PAUSED' });
+          break;
+
         case 'RESUME_DRAWING':
           if (game.hostId !== userId) {
             ws.send(JSON.stringify({ error: 'Only host can resume' }));

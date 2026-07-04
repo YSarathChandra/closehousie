@@ -493,6 +493,7 @@
             </div>
             <div class="header-actions">
                 <button id="startBtn" class="btn btn-primary" style="display:none">▶️ Start</button>
+                <button id="pauseBtn" class="btn btn-primary" style="display:none">⏸️ Pause</button>
                 <button id="resumeBtn" class="btn btn-primary" style="display:none">⏯️ Resume</button>
                 <button id="endBtn" class="btn btn-danger" style="display:none">⏹️ End</button>
                 <button id="logoutBtn" class="btn btn-secondary">Logout</button>
@@ -595,6 +596,7 @@
             loadGames();
             document.getElementById('logoutBtn').onclick = logout;
             document.getElementById('startBtn').onclick = startGame;
+            document.getElementById('pauseBtn').onclick = pauseGame;
             document.getElementById('resumeBtn').onclick = resumeGame;
             document.getElementById('endBtn').onclick = endGame;
         }
@@ -742,6 +744,11 @@
                     render();
                     break;
 
+                case 'DRAWING_PAUSED':
+                    state.game.isDrawing = false;
+                    render();
+                    break;
+
                 case 'DRAWING_RESUMED':
                     state.game.isDrawing = true;
                     render();
@@ -782,8 +789,9 @@
             // Buttons
             const isHost = g.hostId === state.userId;
             document.getElementById('startBtn').style.display = isHost && g.status === 'WAITING' ? 'block' : 'none';
-            document.getElementById('endBtn').style.display = isHost && g.status === 'IN_PROGRESS' ? 'block' : 'none';
+            document.getElementById('pauseBtn').style.display = isHost && g.status === 'IN_PROGRESS' && g.isDrawing ? 'block' : 'none';
             document.getElementById('resumeBtn').style.display = isHost && g.status === 'IN_PROGRESS' && !g.isDrawing ? 'block' : 'none';
+            document.getElementById('endBtn').style.display = isHost && g.status === 'IN_PROGRESS' ? 'block' : 'none';
 
             // Pool
             document.getElementById('poolAmt').textContent = g.prizePool || 0;
@@ -980,6 +988,10 @@
 
         function startGame() {
             state.ws.send(JSON.stringify({ type: 'START_GAME', gameId: state.gameId, userId: state.userId }));
+        }
+
+        function pauseGame() {
+            state.ws.send(JSON.stringify({ type: 'PAUSE_DRAWING', gameId: state.gameId, userId: state.userId }));
         }
 
         function resumeGame() {
