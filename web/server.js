@@ -108,7 +108,7 @@ function generateTickets(count, playerIndex = 0) {
 }
 
 // Prize Validation - Check if marked numbers are valid AND drawn
-function validatePrize(markedNumbers, drawnNumbers, ticket, prizeType) {
+function validatePrize(markedNumbers, drawnNumbers, ticket, prizeType, ticketId, player) {
   const markedSet = new Set(markedNumbers);
   const drawnSet = new Set(drawnNumbers);
 
@@ -159,6 +159,23 @@ function validatePrize(markedNumbers, drawnNumbers, ticket, prizeType) {
     }
 
     case 'Second Full Housie': {
+      // Check if player already won Full Housie on this same ticket
+      const alreadyWonFullHousieOnThisTicket = player.claimedPrizes.some(p =>
+        p.type === 'Full Housie' &&
+        player.tickets.some(t => t.id === ticketId && t.id === ticketId)
+      );
+
+      // Alternative: Check in ticket itself (better approach)
+      const ticketObj = player.tickets.find(t => t.id === ticketId);
+      const hasFullHousieOnTicket = ticketObj && ticketObj.markedNumbers &&
+        ticketObj.markedNumbers.includes('Full Housie');
+
+      // Simpler: Check if this player already claimed Full Housie on this ticket
+      const fullHousieAlreadyClaimed = player.claimedPrizes.some(p => p.type === 'Full Housie');
+      if (fullHousieAlreadyClaimed) {
+        return { valid: false, reason: '2nd Full Housie not eligible: You already won Full Housie on this ticket' };
+      }
+
       const allNums = ticket.flat().filter(n => n !== 0);
       if (allNums.length === 15 && allNums.every(n => markedSet.has(n))) {
         return { valid: true };
@@ -491,7 +508,7 @@ wss.on('connection', (ws) => {
           }
 
           // Validate the prize claim
-          const validation = validatePrize(ticket.markedNumbers, game.drawnNumbers, ticket.grid, prizeType);
+          const validation = validatePrize(ticket.markedNumbers, game.drawnNumbers, ticket.grid, prizeType, ticketId, player);
 
           if (!validation.valid) {
             ws.send(JSON.stringify({
