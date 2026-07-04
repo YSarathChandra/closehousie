@@ -1,0 +1,13 @@
+{
+  "name": "closehousie",
+  "version": "1.0.0",
+  "description": "Tambola game for Android and Web",
+  "main": "web/server.js",
+  "scripts": {
+    "start": "cd web && npm start",
+    "dev": "cd web && npm run dev"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
