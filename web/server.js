@@ -112,7 +112,7 @@ function detectPrizes(markedNumbers, ticket, prizePool, alreadyClaimed = []) {
   const prizes = [];
   const markedSet = new Set(markedNumbers);
 
-  // Jaldhi 5 - First 5 numbers
+  // Jaldhi 5 - First 5 numbers (10%)
   if (markedNumbers.length >= 5 && !alreadyClaimed.includes('Jaldhi 5')) {
     prizes.push({
       type: 'Jaldhi 5',
@@ -121,7 +121,7 @@ function detectPrizes(markedNumbers, ticket, prizePool, alreadyClaimed = []) {
     });
   }
 
-  // Top Line
+  // Top Line (10%)
   if (!alreadyClaimed.includes('Top Line')) {
     const topLine = ticket[0].filter(n => n !== 0);
     if (topLine.length > 0 && topLine.every(n => markedSet.has(n))) {
@@ -133,7 +133,7 @@ function detectPrizes(markedNumbers, ticket, prizePool, alreadyClaimed = []) {
     }
   }
 
-  // Middle Line
+  // Middle Line (10%)
   if (!alreadyClaimed.includes('Middle Line')) {
     const midLine = ticket[1].filter(n => n !== 0);
     if (midLine.length > 0 && midLine.every(n => markedSet.has(n))) {
@@ -145,7 +145,7 @@ function detectPrizes(markedNumbers, ticket, prizePool, alreadyClaimed = []) {
     }
   }
 
-  // Bottom Line
+  // Bottom Line (10%)
   if (!alreadyClaimed.includes('Bottom Line')) {
     const botLine = ticket[2].filter(n => n !== 0);
     if (botLine.length > 0 && botLine.every(n => markedSet.has(n))) {
@@ -157,7 +157,7 @@ function detectPrizes(markedNumbers, ticket, prizePool, alreadyClaimed = []) {
     }
   }
 
-  // Full Housie - All 15 numbers
+  // Full Housie - All 15 numbers (30%)
   if (!alreadyClaimed.includes('Full Housie')) {
     const allNums = ticket.flat().filter(n => n !== 0);
     if (allNums.length === 15 && allNums.every(n => markedSet.has(n))) {
@@ -165,6 +165,18 @@ function detectPrizes(markedNumbers, ticket, prizePool, alreadyClaimed = []) {
         type: 'Full Housie',
         icon: '🏆',
         amount: Math.floor(prizePool * 0.30)
+      });
+    }
+  }
+
+  // Second Full Housie - All 15 numbers again (20%, only if someone already won Full Housie)
+  if (!alreadyClaimed.includes('Second Full Housie')) {
+    const allNums = ticket.flat().filter(n => n !== 0);
+    if (allNums.length === 15 && allNums.every(n => markedSet.has(n))) {
+      prizes.push({
+        type: 'Second Full Housie',
+        icon: '🥈',
+        amount: Math.floor(prizePool * 0.20)
       });
     }
   }

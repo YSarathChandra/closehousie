@@ -269,16 +269,6 @@
             font-weight: 700;
         }
 
-        .cell.drawn {
-            background: #e8eef9;
-            border-color: #667eea;
-        }
-
-        .cell.drawn.marked {
-            background: #667eea;
-            color: white;
-        }
-
         .cell:hover:not(.empty) {
             opacity: 0.8;
             transform: scale(1.05);
@@ -828,29 +818,35 @@
                     if (n === 0) return '<div class="cell empty"></div>';
 
                     const isMarked = marked.has(n);
-                    const isDrawn = g.drawnNumbers.includes(n);
 
                     let classes = 'cell';
                     if (isMarked) classes += ' marked';
-                    // Add visual indicator for drawn numbers (optional - for visual feedback)
-                    if (isDrawn) classes += ' drawn';
 
                     return `
-                        <div class="${classes}" data-ticket="${t.id}" data-number="${n}" title="${isDrawn ? 'Drawn' : 'Not drawn yet'}">
+                        <div class="${classes}" data-ticket="${t.id}" data-number="${n}">
                             ${n}
                         </div>
                     `;
                 }).join('');
 
-                const prizes = getPrizes(t, g);
-                const prizeHtml = prizes.map(p => {
+                // All 6 possible prizes
+                const allPrizes = [
+                    { type: 'Jaldhi 5', icon: '5️⃣' },
+                    { type: 'Top Line', icon: '⬆️' },
+                    { type: 'Middle Line', icon: '➡️' },
+                    { type: 'Bottom Line', icon: '⬇️' },
+                    { type: 'Full Housie', icon: '🏆' },
+                    { type: 'Second Full Housie', icon: '🥈' }
+                ];
+
+                const prizeHtml = allPrizes.map(p => {
                     const claimed = g.prizes[p.type] !== undefined;
                     return `
                         <button class="prize-btn" ${claimed ? 'disabled' : ''} data-ticket="${t.id}" data-prize="${p.type}" title="${p.type}">
                             ${p.icon}
                         </button>
                     `;
-                }).join('') || 'No prizes';
+                }).join('');
 
                 return `
                     <div class="ticket mine">
@@ -872,7 +868,6 @@
                 cell.addEventListener('click', function() {
                     const ticketId = this.dataset.ticket;
                     const number = parseInt(this.dataset.number);
-                    // Toggle mark on/off
                     toggleMark(ticketId, number);
                 });
             });
@@ -885,37 +880,6 @@
                     claimPrize(ticketId, prizeType);
                 });
             });
-        }
-
-        function getPrizes(ticket, game) {
-            const marked = new Set(ticket.markedNumbers);
-            const prizes = [];
-
-            if (marked.size >= 5 && !game.prizes['Jaldhi 5']) {
-                prizes.push({ type: 'Jaldhi 5', icon: '5️⃣' });
-            }
-
-            if (!game.prizes['Top Line']) {
-                const top = ticket.grid[0].filter(n => n !== 0);
-                if (top.every(n => marked.has(n))) prizes.push({ type: 'Top Line', icon: '⬆️' });
-            }
-
-            if (!game.prizes['Middle Line']) {
-                const mid = ticket.grid[1].filter(n => n !== 0);
-                if (mid.every(n => marked.has(n))) prizes.push({ type: 'Middle Line', icon: '➡️' });
-            }
-
-            if (!game.prizes['Bottom Line']) {
-                const bot = ticket.grid[2].filter(n => n !== 0);
-                if (bot.every(n => marked.has(n))) prizes.push({ type: 'Bottom Line', icon: '⬇️' });
-            }
-
-            if (!game.prizes['Full Housie']) {
-                const all = ticket.grid.flat().filter(n => n !== 0);
-                if (all.every(n => marked.has(n))) prizes.push({ type: 'Full Housie', icon: '🏆' });
-            }
-
-            return prizes;
         }
 
         function renderLeaderboard() {
